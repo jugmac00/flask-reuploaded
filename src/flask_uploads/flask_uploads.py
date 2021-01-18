@@ -11,8 +11,7 @@ and upload your files to it.
 :license:   MIT/X11, see LICENSE for details
 """
 import os
-import os.path
-import posixpath
+from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -79,7 +78,7 @@ def config_for_set(
             # use the default dest from the config
             if defaults['dest'] is not None:
                 using_defaults = True
-                destination = os.path.join(defaults['dest'], uset.name)
+                destination = str(Path(defaults['dest']) / uset.name)
             else:
                 raise RuntimeError("no destination for set %s" % uset.name)
 
@@ -148,14 +147,14 @@ class UploadConfiguration:
             allow: Union[Tuple[()], Tuple[str, ...]] = (),
             deny: Union[Tuple[()], Tuple[str, ...]] = ()
     ) -> None:
-        self.destination = destination
+        self.destination = Path(destination)
         self.base_url = base_url
         self.allow = allow
         self.deny = deny
 
     @property
     def tuple(self) -> Tuple[
-        str, Optional[str],
+        Path, Optional[str],
         Union[Tuple[()], Tuple[str, ...]],
         Union[Tuple[()], Tuple[str, ...]]
     ]:
@@ -243,11 +242,10 @@ class UploadSet:
         :param folder: The subfolder within the upload set previously used
                        to save to.
         """
+        parts = [filename]
         if folder is not None:
-            target_folder = os.path.join(self.config.destination, folder)
-        else:
-            target_folder = self.config.destination
-        return os.path.join(target_folder, filename)
+            parts.insert(0, folder)
+        return str(self.config.destination.joinpath(*parts))
 
     def file_allowed(self, storage: FileStorage, basename: str) -> bool:
         """This tells whether a file is allowed.
@@ -307,39 +305,29 @@ class UploadSet:
         """
         if not isinstance(storage, FileStorage):
             raise TypeError("storage must be a werkzeug.FileStorage")
-
-        if folder is None and name is not None and "/" in name:
-            folder, name = os.path.split(name)
         if storage.filename is None:
             raise ValueError("Filename must not be empty!")
         basename = self.get_basename(storage.filename)
-
         if not self.file_allowed(storage, basename):
             raise UploadNotAllowed()
 
-        if name:
-            if name.endswith('.'):
-                basename = name + extension(basename)
-            else:
-                basename = name
+        parts = []
+        if folder is not None:
+            parts.append(folder)
+        parts.append(basename if name is None else name)
+        target = self.config.destination.joinpath(*parts)
 
-        if folder:
-            target_folder = os.path.join(self.config.destination, folder)
-        else:
-            target_folder = self.config.destination
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
-        if os.path.exists(os.path.join(target_folder, basename)):
-            basename = self.resolve_conflict(target_folder, basename)
+        if not target.suffix and target.stem.endswith('.'):
+            target = target.with_name(f"{target.stem}{extension(basename)}")
+        # TODO: target.parent.mkdir(parents=True, exist_ok=True)
+        os.makedirs(target.parent)
+        if os.path.exists(str(target)):
+            target = self.resolve_conflict(target)
 
-        target = os.path.join(target_folder, basename)
-        storage.save(target)
-        if folder:
-            return posixpath.join(folder, basename)
-        else:
-            return basename
+        storage.save(str(target))
+        return str(target.relative_to(self.config.destination))
 
-    def resolve_conflict(self, target_folder: str, basename: str) -> str:
+    def resolve_conflict(self, target: Path) -> Path:
         """
         If a file with the selected name already exists in the target folder,
         this method is called to resolve the conflict. It should return a new
@@ -349,16 +337,16 @@ class UploadSet:
         suffix to the name consisting of an underscore and a number, and tries
         that until it finds one that doesn't exist.
 
-        :param target_folder: The absolute path to the target.
-        :param basename: The file's original basename.
+        :param target: The absolute path to the original file.
         """
-        name, ext = os.path.splitext(basename)
-        count = 0
+        # I know this would be more elegant with itertools.count(1),
+        # but mypy and coverage won't agree with you. Don't even bother.
+        count = 1
         while True:
-            count = count + 1
-            newname = '%s_%d%s' % (name, count, ext)
-            if not os.path.exists(os.path.join(target_folder, newname)):
-                return newname
+            newpath = target.with_name(f"{target.stem}_{count}{target.suffix}")
+            if not os.path.exists(str(newpath)):
+                return newpath
+            count += 1
 
 
 uploads_mod = Blueprint('_uploads', __name__, url_prefix='/_uploads')
