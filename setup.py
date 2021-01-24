@@ -39,6 +39,7 @@ setup(
     maintainer_email="juergen.gmach@googlemail.com",
     description="Flexible and efficient upload handling for Flask",
     long_description=LONG,
+    long_description_content_type="text/x-rst",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     zip_safe=False,
