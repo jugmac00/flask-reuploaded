@@ -218,7 +218,9 @@ class UploadSet:
             )  # type: UploadConfiguration
             return upload_configuration
         except AttributeError:
-            raise RuntimeError("cannot access configuration outside request")
+            raise RuntimeError(
+                "The application is not properly configured. "
+                "Please make sure to use `configure_uploads`.")
 
     def url(self, filename: str) -> str:
         """
