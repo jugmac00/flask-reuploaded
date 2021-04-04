@@ -6,8 +6,9 @@ include *.toml
 include tox.ini
 recursive-include tests *.py
 
+recursive-include docs *.txt
 include docs/Makefile
 include docs/conf.py
 include docs/index.rst
 include docs/make.bat
-
+recursive-include src *.yaml
