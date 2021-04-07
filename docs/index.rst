@@ -93,7 +93,7 @@ that apply as "defaults" if you don't provide the proper settings otherwise.
     slash.
 
 If you want to serve the uploads via http, and you expect heavy traffic,
-you should think about serving the files directly by a web/proxy servers as e.g. Nginx.
+you should think about serving the files directly by a web/proxy server as e.g. Nginx.
 
 By default Flask doesn't put any limits on the size of the uploaded
 data. To limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH`.
