@@ -52,9 +52,13 @@ Migration guide from `Flask-Uploads`
 Incompatibilities between Flask-Reuploaded and Flask-Uploads
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Currently, there are no known incompatibilities.
+As already mentioned,
+staying compatible with `Flask-Uploads` is one of this project's goals.
 
-Just follow the **Uninstall and install** instructions below.
+Nevertheless, there are the following known incompatibilities:
+
+- the `patch_request_class` helper function has been removed;
+  the function was only necessary for Flask 0.6 and earlier.
 
 Please note, that `Flask-Uploads`,
 and thus also `Flask-Reuploaded` has an builtin **autoserve** feature.
