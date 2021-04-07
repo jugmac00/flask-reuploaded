@@ -92,10 +92,8 @@ that apply as "defaults" if you don't provide the proper settings otherwise.
     would start with ``http://localhost:5001/photos``. Include the trailing
     slash.
 
-However, you don't have to set any of the ``_URL`` settings - if you don't,
-then they will be served internally by Flask. They are just there so if you
-have heavy upload traffic, you can have a faster production server like Nginx
-serve the uploads.
+If you want to serve the uploads via http, and you expect heavy traffic,
+you should think about serving the files directly by a web/proxy servers as e.g. Nginx.
 
 By default Flask doesn't put any limits on the size of the uploaded
 data. To limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH`.
