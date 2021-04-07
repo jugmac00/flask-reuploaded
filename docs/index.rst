@@ -14,6 +14,43 @@ different places and to generate different URLs for them.
    :backlinks: none
 
 
+Installation
+============
+
+.. code-block:: bash
+
+    $ pip install Flask-Reuploaded
+
+
+Getting started
+===============
+
+create an UploadSet
+
+.. code-block:: python
+
+    from flask_uploads import IMAGES
+
+    photos = UploadSet("photos", IMAGES)
+
+configure your Flask app and this extension
+
+.. code-block:: python
+
+    app.config["UPLOADED_PHOTOS_DEST"] = "static/img"
+    app.config["SECRET_KEY"] = os.urandom(24)
+    configure_uploads(app, photos)
+
+use `photos` in your view function
+
+.. code-block:: python
+
+    photos.save(request.files['photo'])
+
+Please have a look at the project's README file for a `complete working example
+application <https://github.com/jugmac00/flask-reuploaded#readme>`_.
+
+
 Configuration
 =============
 If you're just deploying an application that uses Flask-Reuploaded, you can
@@ -55,10 +92,8 @@ that apply as "defaults" if you don't provide the proper settings otherwise.
     would start with ``http://localhost:5001/photos``. Include the trailing
     slash.
 
-However, you don't have to set any of the ``_URL`` settings - if you don't,
-then they will be served internally by Flask. They are just there so if you
-have heavy upload traffic, you can have a faster production server like Nginx
-serve the uploads.
+If you want to serve the uploaded files via http, and you expect heavy traffic,
+you should think about serving the files directly by a web/proxy server as e.g. Nginx.
 
 By default Flask doesn't put any limits on the size of the uploaded
 data. To limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH`.
@@ -77,13 +112,14 @@ data. To limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH`.
 
 Upload Sets
 ===========
-An "upload set" is a single collection of files. You just declare them in the
-code::
+An `UploadSet` is a single collection of files.
+You just declare them in the code::
 
     photos = UploadSet('photos', IMAGES)
 
-And then you can use the `~UploadSet.save` method to save uploaded files and
-`~UploadSet.path` and `~UploadSet.url` to access them. For example::
+And then you can use the `UploadSet.save` method to save uploaded files and
+`UploadSet.path` and `UploadSet.url` to access them.
+For example::
 
     @app.route('/upload', methods=['GET', 'POST'])
     def upload():
@@ -117,10 +153,10 @@ though. It's just to save your users a little configuration time.
 
 App Configuration
 =================
-An upload set's configuration is stored on an app. That way, you can have
+An `UploadSet`'s configuration is stored on an app. That way, you can have
 upload sets being used by multiple apps at once. You use the
-`configure_uploads` function to load the configuration for the upload sets.
-You pass in the app and all of the upload sets you want configured. Calling
+`configure_uploads` function to load the configuration for the `UploadSet`s.
+You pass in the app and all of the `UploadSet`s you want configured. Calling
 `configure_uploads` more than once is safe. ::
 
     configure_uploads(app, (photos, media))
