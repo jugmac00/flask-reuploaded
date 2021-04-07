@@ -59,35 +59,11 @@ Nevertheless, there are the following known incompatibilities:
 
 - the `patch_request_class` helper function has been removed;
   the function was only necessary for Flask 0.6 and earlier.
-
-Please note, that `Flask-Uploads`,
-and thus also `Flask-Reuploaded` has an builtin **autoserve** feature.
-
-This means that uploaded files are automatically served for viewing and downloading.
-
-e.g. if you configure an `UploadSet` with the name `photos`,
-and upload a picture called `snow.jpg`,
-the picture can be automatically accessed at e.g.
-http://localhost:5000/_uploads/photos/snow.jpg
-unless
-
-- you set `UPLOADED_PHOTOS_URL` to an empty string
-- you configure `UPLOADED_PHOTOS_URL` with a valid string (then the picture is served from there)
-- or you set `UPLOADS_AUTOSERVE` to `False`.
-
-The last option is new in `Flask-Reuploaded`.
-
-In order to stay compatible with `Flask-Uploads`,
-by default `UPLOADS_AUTOSERVE` is currently set to `True`,
-
-With `Flask-Reuploaded` version 1.0.0,
-`UPLOADS_AUTOSERVE` will default to `False`,
-as this feature is/was undocumented,
-surprising,
-and actually it could lead to unwanted data disclosure.
-
-Setting it explicitly to `False` is recommended.
-
+- `autoserve` of uploaded images now has been deactivated;
+  this was a poorly documented "feature",
+  which even could have lead to unwanted data disclosure;
+  if you want to activate the feature again,
+  you need to set `UPLOADS_AUTOSERVE=True`
 
 Uninstall and install
 ~~~~~~~~~~~~~~~~~~~~~
