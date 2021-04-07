@@ -7,7 +7,7 @@ unreleased
 - use official `Pallets` theme for the documentation
 - remove deprecated `patch_request_class` helper function; use `MAX_CONTENT_LENGTH` instead.
 - `autoserve` now has been deactivated by default and needs explicit activation
-  via setting `UPLOADS_AUTOSERVE=True`
+  via the setting `UPLOADS_AUTOSERVE=True`
 
 
 0.5.0
