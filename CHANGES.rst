@@ -5,6 +5,7 @@ unreleased
 ----------
 - raise test coverage to 100%
 - use official `Pallets` theme for the documentation
+- remove deprecated `patch_request_class` helper function; use `MAX_CONTENT_LENGTH` instead.
 
 
 0.5.0

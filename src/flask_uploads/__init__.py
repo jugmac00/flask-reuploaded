@@ -5,8 +5,6 @@ isort:skip_file
 # This huge list of imports is kept on purpose,
 # as `Flask-Uploads` provided them as public API,
 # and `Flask-Reuploaded` tries to stay compatible.
-from .backwards_compatibility import patch_request_class
-
 from .exceptions import UploadNotAllowed
 
 from .extensions import ALL
@@ -40,7 +38,6 @@ __all__ = [
     "configure_uploads",
     "extension",
     "lowercase_ext",
-    "patch_request_class",
     "config_for_set",
     "ALL",
     "AllExcept",

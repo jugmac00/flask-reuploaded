@@ -164,8 +164,6 @@ Application Setup
 -----------------
 .. autofunction:: configure_uploads
 
-.. autofunction:: patch_request_class
-
 
 Extension Constants
 -------------------
