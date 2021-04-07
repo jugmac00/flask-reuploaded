@@ -1,6 +1,11 @@
 Changelog
 =========
 
+unreleased
+----------
+- nothing yet
+
+
 1.0.0 (2021.04.07)
 ------------------
 - raise test coverage to 100%
