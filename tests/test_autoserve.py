@@ -1,6 +1,5 @@
 import os
 
-import pytest
 from flask import Flask
 from flask_uploads import ALL
 from flask_uploads import IMAGES
@@ -14,10 +13,11 @@ SIMPLE_PICTURE = (
 )
 
 
-def test_autoserve_works_without_configuration(tmp_path):
+def test_autoserve_works_no_longer_without_configuration(tmp_path):
     """this *feature* was pretty much undocumented
 
-    It could lead to unwanted data disclosure.
+    As it could lead to unwanted data disclosure,
+    it was deactivated by default with Flask-Reuploaded version 1.0
     """
     static = tmp_path / "static"
     static.mkdir()
@@ -33,14 +33,33 @@ def test_autoserve_works_without_configuration(tmp_path):
     configure_uploads(app, photos)
 
     with app.test_client() as client:
-        with pytest.warns(None) as record:
-            response = client.get("/_uploads/photos/snow.jpg")
+        response = client.get("/_uploads/photos/snow.jpg")
+    assert response.status == "404 NOT FOUND"
 
-    # autoserve will default to false in the upcoming 1.0.0 release
-    # make sure the warning about the upcoming change is issued
-    assert len(record) == 1
-    assert "You are using the undocumented AUTOSERVE feature." in str(record[0].message)  # noqa: E501
 
+def test_autoserve_needs_to_be_activated(tmp_path):
+    """this *feature* was pretty much undocumented
+
+    As it could lead to unwanted data disclosure,
+    it was deactivated with Flask-Reuploaded version 1.0
+    It has to be activated by e.g.
+    ``app.config["UPLOADS_AUTOSERVE"] = True``
+    """
+    static = tmp_path / "static"
+    static.mkdir()
+    image_directory = static / "images"
+    image_directory.mkdir()
+    p = image_directory / "snow.jpg"
+    p.write_bytes(SIMPLE_PICTURE)
+
+    app = Flask(__name__)
+    photos = UploadSet("photos", IMAGES)
+    app.config["UPLOADED_PHOTOS_DEST"] = str(image_directory)
+    app.config["SECRET_KEY"] = os.urandom(24)
+    app.config["UPLOADS_AUTOSERVE"] = True
+    configure_uploads(app, photos)
+    with app.test_client() as client:
+        response = client.get("/_uploads/photos/snow.jpg")
     assert response.status == "200 OK"
 
 
@@ -136,6 +155,7 @@ def test_autoserve_gets_deactivated_when_set_autoserve_to_false(tmp_path):
     app.config["SECRET_KEY"] = os.urandom(24)
 
     # configuring this deactivates autoserve
+    # this is the default behavior since Flask-Reuploaded 1.0
     app.config["UPLOADS_AUTOSERVE"] = False
 
     configure_uploads(app, photos)

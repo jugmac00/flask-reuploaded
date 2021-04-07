@@ -105,8 +105,8 @@ data. To limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH`.
     file is `snow.jpg`, the file is available via
     `http://localhost:5000/_uploads/photos/snow.jpg`.
     In order to stay compatible with `Flask-Uploads`,
-    for `Flask-Reuploaded` < 1.0.0 `UPLOADS_AUTOSERVE` defaults to `True`.
-    In version `1.0.0` `UPLOADS_AUTOSERVE` will default to `False`,
+    for `Flask-Reuploaded` < 1.0.0 `UPLOADS_AUTOSERVE` defaulted to `True`.
+    Since version `1.0.0` `UPLOADS_AUTOSERVE` defaults to `False`,
     as this `feature` is a bit of a surprise, as it was undocumented for a long time.
 
 
@@ -240,6 +240,7 @@ Backwards Compatibility
 Version 1.0 (unreleased)
 ------------------------
 * Removal of `patch_request_class`
+* `autoserve` is now deactivated by default
 
 
 Version 0.1.3

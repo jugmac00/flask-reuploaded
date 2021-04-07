@@ -369,6 +369,7 @@ class TestPathsAndURLs:
         app.config.update(
             UPLOADED_FILES_DEST='/uploads'
         )
+        app.config["UPLOADS_AUTOSERVE"] = True
         uset = UploadSet('files')
         configure_uploads(app, uset)
         with app.test_request_context():

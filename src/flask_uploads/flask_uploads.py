@@ -120,7 +120,7 @@ def configure_uploads(app: Flask, upload_sets: Iterable['UploadSet']) -> None:
         config = config_for_set(uset, app, defaults)
         set_config[uset.name] = config
 
-    autoserve = app.config.get("UPLOADS_AUTOSERVE", True)
+    autoserve = app.config.get("UPLOADS_AUTOSERVE", False)
     if autoserve:
         should_serve = any(s.base_url is None for s in set_config.values())
         if '_uploads' not in app.blueprints and should_serve:
@@ -368,14 +368,6 @@ uploads_mod = Blueprint('_uploads', __name__, url_prefix='/_uploads')
 
 @uploads_mod.route('/<setname>/<path:filename>')
 def uploaded_file(setname: UploadSet, filename: str) -> Any:
-    if not current_app.config.get("UPLOADS_AUTOSERVE"):
-        import warnings
-        warnings.warn(
-            "\nYou are using the undocumented AUTOSERVE feature.\n"
-            "With `Flask-Reuploaded` 1.0.0 you have to enable it explicitly.\n"
-            "To do so, you have to configure your app as following:\n"
-            "`app.config['UPLOADS_AUTOSERVE'] = 'True'`"
-        )
     config = current_app.upload_set_config.get(setname)
     if config is None:
         abort(404)
