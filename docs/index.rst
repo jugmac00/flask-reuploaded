@@ -48,7 +48,7 @@ use `photos` in your view function
     photos.save(request.files['photo'])
 
 Please have a look at the project's README file for a `complete working example
-application <https://github.com/jugmac00/flask-reuploaded>`_.
+application <https://github.com/jugmac00/flask-reuploaded#readme>`_.
 
 
 Configuration
