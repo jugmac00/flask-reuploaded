@@ -92,7 +92,7 @@ that apply as "defaults" if you don't provide the proper settings otherwise.
     would start with ``http://localhost:5001/photos``. Include the trailing
     slash.
 
-If you want to serve the uploads via http, and you expect heavy traffic,
+If you want to serve the uploaded files via http, and you expect heavy traffic,
 you should think about serving the files directly by a web/proxy server as e.g. Nginx.
 
 By default Flask doesn't put any limits on the size of the uploaded
