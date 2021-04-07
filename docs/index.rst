@@ -14,6 +14,43 @@ different places and to generate different URLs for them.
    :backlinks: none
 
 
+Installation
+============
+
+.. code-block:: bash
+
+    $ pip install Flask-Reuploaded
+
+
+Getting started
+===============
+
+create an UploadSet
+
+.. code-block:: python
+
+    from flask_uploads import IMAGES
+
+    photos = UploadSet("photos", IMAGES)
+
+configure your Flask app and this extension
+
+.. code-block:: python
+
+    app.config["UPLOADED_PHOTOS_DEST"] = "static/img"
+    app.config["SECRET_KEY"] = os.urandom(24)
+    configure_uploads(app, photos)
+
+use `photos` in your view function
+
+.. code-block:: python
+
+    photos.save(request.files['photo'])
+
+Please have a look at the project's README file for a `complete working example
+application <https://github.com/jugmac00/flask-reuploaded>`_.
+
+
 Configuration
 =============
 If you're just deploying an application that uses Flask-Reuploaded, you can
