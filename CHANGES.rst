@@ -1,8 +1,8 @@
 Changelog
 =========
 
-unreleased
-----------
+1.0.0 (2021.04.07)
+------------------
 - raise test coverage to 100%
 - use official `Pallets` theme for the documentation
 - remove deprecated `patch_request_class` helper function; use `MAX_CONTENT_LENGTH` instead.
