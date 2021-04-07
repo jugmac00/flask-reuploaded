@@ -4,6 +4,7 @@ Changelog
 unreleased
 ----------
 - raise test coverage to 100%
+- use official `Pallets` theme for the documentation
 
 
 0.5.0
