@@ -114,13 +114,14 @@ data. To limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH`.
 
 Upload Sets
 ===========
-An "upload set" is a single collection of files. You just declare them in the
-code::
+An `UploadSet` is a single collection of files.
+You just declare them in the code::
 
     photos = UploadSet('photos', IMAGES)
 
-And then you can use the `~UploadSet.save` method to save uploaded files and
-`~UploadSet.path` and `~UploadSet.url` to access them. For example::
+And then you can use the `UploadSet.save` method to save uploaded files and
+`UploadSet.path` and `UploadSet.url` to access them.
+For example::
 
     @app.route('/upload', methods=['GET', 'POST'])
     def upload():
@@ -154,10 +155,10 @@ though. It's just to save your users a little configuration time.
 
 App Configuration
 =================
-An upload set's configuration is stored on an app. That way, you can have
+An `UploadSet`'s configuration is stored on an app. That way, you can have
 upload sets being used by multiple apps at once. You use the
-`configure_uploads` function to load the configuration for the upload sets.
-You pass in the app and all of the upload sets you want configured. Calling
+`configure_uploads` function to load the configuration for the `UploadSet`s.
+You pass in the app and all of the `UploadSet`s you want configured. Calling
 `configure_uploads` more than once is safe. ::
 
     configure_uploads(app, (photos, media))
