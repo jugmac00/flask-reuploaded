@@ -237,8 +237,8 @@ Testing Utilities
 Backwards Compatibility
 =======================
 
-Version 1.0 (unreleased)
-------------------------
+Version 1.0
+-----------
 * Removal of `patch_request_class`
 * `autoserve` is now deactivated by default
 
