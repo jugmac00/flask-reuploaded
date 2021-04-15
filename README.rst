@@ -59,6 +59,10 @@ Nevertheless, there are the following known incompatibilities:
 
 - the `patch_request_class` helper function has been removed;
   the function was only necessary for Flask 0.6 and earlier.
+  Since then you can use Flask's own
+  [MAX_CONTENT_LENGTH](https://flask.palletsprojects.com/en/1.1.x/config/#MAX_CONTENT_LENGTH)
+  environment variable,
+  so you don’t read more than this many bytes from the incoming request data.
 - `autoserve` of uploaded images now has been deactivated;
   this was a poorly documented "feature",
   which even could have lead to unwanted data disclosure;
