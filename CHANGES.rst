@@ -1,6 +1,11 @@
 Changelog
 =========
 
+unreleased
+----------
+- nothing yet
+
+
 1.1.0 (2021.05.09)
 ------------------
 - make type checkers aware that this library is using type annotations
