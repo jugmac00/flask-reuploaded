@@ -3,7 +3,7 @@ Changelog
 
 unreleased
 ----------
-- nothing yet
+- make type checkers aware that this library is using type annotations
 
 
 1.0.0 (2021.04.07)
