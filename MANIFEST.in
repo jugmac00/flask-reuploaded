@@ -9,8 +9,5 @@ recursive-include tests *.py
 include src/flask_uploads/py.typed
 
 recursive-include docs *.txt
-include docs/Makefile
 include docs/conf.py
 include docs/index.rst
-include docs/make.bat
-recursive-include src *.yaml
