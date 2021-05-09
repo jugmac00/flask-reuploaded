@@ -44,6 +44,7 @@ setup(
     package_dir={"": "src"},
     zip_safe=False,
     platforms="any",
+    include_package_data=True,
     install_requires=["Flask>=1.0.4"],
     extras_require={
         "test": [
