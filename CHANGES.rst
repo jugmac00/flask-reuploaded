@@ -4,6 +4,7 @@ Changelog
 unreleased
 ----------
 - add contexts to coverage report
+- pin documentation dependencies to prevent future breakage
 
 
 1.1.0 (2021.05.09)

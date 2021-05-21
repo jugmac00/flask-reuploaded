@@ -133,9 +133,21 @@ See below for a complete example.
 Documentation
 -------------
 
-The documentation can be found at...
+You can find the documentation at:
 
 https://flask-reuploaded.readthedocs.io/en/latest/
+
+You can generate the documentation locally:
+
+.. code-block:: bash
+
+    tox -e docs
+
+You can update the dependencies for documentation generation:
+
+.. code-block:: bash
+
+    tox -e upgradedocs
 
 
 Minimal example application

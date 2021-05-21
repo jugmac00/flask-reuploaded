@@ -11,3 +11,4 @@ include src/flask_uploads/py.typed
 recursive-include docs *.txt
 include docs/conf.py
 include docs/index.rst
+recursive-include docs *.in
