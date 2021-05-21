@@ -5,8 +5,8 @@ This means:
     - it has to be importable
     - it can't be moved in the tests directory
 """
-from typing import IO
 from typing import Any
+from typing import BinaryIO
 from typing import Optional
 
 from werkzeug.datastructures import FileStorage
@@ -32,7 +32,7 @@ class TestingFileStorage(FileStorage):
     """
     def __init__(
         self,
-        stream: Optional[IO[bytes]] = None,
+        stream: Optional[BinaryIO] = None,
         filename: Optional[str] = None,
         name: Optional[str] = None,
         content_type: str = 'application/octet-stream',
