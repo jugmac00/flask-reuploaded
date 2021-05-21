@@ -3,13 +3,12 @@ Changelog
 
 unreleased
 ----------
-- nothing yet
+- add contexts to coverage report
 
 
 1.1.0 (2021.05.09)
 ------------------
 - make type checkers aware that this library is using type annotations
-- add contexts to coverage report
 
 
 1.0.0 (2021.04.07)
