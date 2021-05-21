@@ -109,8 +109,8 @@ def configure_uploads(app: Flask, upload_sets: Iterable['UploadSet']) -> None:
         upload_sets = (upload_sets,)
 
     if not hasattr(app, 'upload_set_config'):
-        app.upload_set_config = {}
-    set_config = app.upload_set_config
+        app.upload_set_config = {}  # type: ignore
+    set_config = app.upload_set_config  # type: ignore
     defaults = dict(
         dest=app.config.get('UPLOADS_DEFAULT_DEST'),
         url=app.config.get('UPLOADS_DEFAULT_URL')
@@ -214,7 +214,7 @@ class UploadSet:
             return self._config
         try:
             upload_configuration = (
-                current_app.upload_set_config[self.name]
+                current_app.upload_set_config[self.name]  # type: ignore
             )  # type: UploadConfiguration
             return upload_configuration
         except AttributeError:
@@ -368,7 +368,7 @@ uploads_mod = Blueprint('_uploads', __name__, url_prefix='/_uploads')
 
 @uploads_mod.route('/<setname>/<path:filename>')
 def uploaded_file(setname: UploadSet, filename: str) -> Any:
-    config = current_app.upload_set_config.get(setname)
+    config = current_app.upload_set_config.get(setname)  # type: ignore
     if config is None:
         abort(404)
     return send_from_directory(config.destination, filename)
