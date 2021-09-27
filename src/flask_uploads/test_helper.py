@@ -39,8 +39,7 @@ class TestingFileStorage(FileStorage):
         content_length: int = -1,
         headers: Optional[Any] = None
     ) -> None:
-        FileStorage.__init__(
-            self,
+        super().__init__(
             stream,
             filename,
             name=name,
