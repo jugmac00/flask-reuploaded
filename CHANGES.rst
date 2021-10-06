@@ -6,6 +6,7 @@ unreleased
 - add contexts to coverage report
 - pin documentation dependencies to prevent future breakage
 - fix typing errors (mypy) with recently released Flask 2.0.1
+- add support for Python 3.10
 
 
 1.1.0 (2021.05.09)
