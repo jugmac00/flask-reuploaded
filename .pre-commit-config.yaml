@@ -22,7 +22,7 @@ repos:
       args: [--py36-plus]
 
   - repo: https://github.com/mgedmin/check-python-versions
-    rev: 0.18.2
+    rev: 0.19.1
     hooks:
     - id: check-python-versions
 
