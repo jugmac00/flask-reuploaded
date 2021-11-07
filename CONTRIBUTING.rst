@@ -34,6 +34,6 @@ Some examples.
 
 	tox -e py38  # runs the tests for Python 3.8
 
-	tox -e flake8  # runs the Flake8 linter
+	tox -e lint  # runs various linters via pre-commit
 
 If there is anything unclear, please feel free to ask!
