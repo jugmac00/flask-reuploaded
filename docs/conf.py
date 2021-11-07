@@ -21,9 +21,9 @@ copyright = 'Matthew "LeafStorm" Frazier(2010), Jürgen Gmach (2020)'
 # built documents.
 #
 # The short X.Y version.
-version = '1.1.1.dev0'
+version = '1.2.0'
 # The full version, including alpha/beta/rc tags.
-release = '1.1.1.dev0'
+release = version
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

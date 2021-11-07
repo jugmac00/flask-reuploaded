@@ -1,8 +1,8 @@
 Changelog
 =========
 
-unreleased
-----------
+1.2.0 (2021.11.07)
+------------------
 - add contexts to coverage report
 - pin documentation dependencies to prevent future breakage
 - fix typing errors (mypy) with recently released Flask 2.0.1
