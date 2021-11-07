@@ -9,7 +9,7 @@ Intended scope of this package
 ------------------------------
 
 This package was created as the original `Flask-Uploads` stopped working back in February 2020.
-At least the PyPi packages.
+At least the PyPI packages.
 
 The intention is to provide a drop-in-replacement.
 
