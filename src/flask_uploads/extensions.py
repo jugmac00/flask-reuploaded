@@ -1,6 +1,7 @@
 """Extension presets and extension configuration."""
 import os
 from typing import Iterable
+from typing import cast
 
 # This contains archive and compression formats (.gz, .bz2, .zip, .tar,
 # .tgz, .txz, and .7z).
@@ -74,7 +75,8 @@ class All:
 
 #: This "contains" all items. You can use it to allow all extensions to be
 #: uploaded.
-ALL = All()
+x = All()
+ALL = cast(Iterable[str], x)
 
 
 class AllExcept:
