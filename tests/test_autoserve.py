@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from flask import Flask
 from flask_uploads import ALL
@@ -13,7 +14,9 @@ SIMPLE_PICTURE = (
 )
 
 
-def test_autoserve_works_no_longer_without_configuration(tmp_path):
+def test_autoserve_works_no_longer_without_configuration(
+    tmp_path: Path
+) -> None:
     """this *feature* was pretty much undocumented
 
     As it could lead to unwanted data disclosure,
@@ -37,7 +40,7 @@ def test_autoserve_works_no_longer_without_configuration(tmp_path):
     assert response.status == "404 NOT FOUND"
 
 
-def test_autoserve_needs_to_be_activated(tmp_path):
+def test_autoserve_needs_to_be_activated(tmp_path: Path) -> None:
     """this *feature* was pretty much undocumented
 
     As it could lead to unwanted data disclosure,
@@ -63,7 +66,9 @@ def test_autoserve_needs_to_be_activated(tmp_path):
     assert response.status == "200 OK"
 
 
-def test_autoserve_does_not_work_for_non_existing_upload_set(tmp_path):
+def test_autoserve_does_not_work_for_non_existing_upload_set(
+    tmp_path: Path
+) -> None:
     """
     ie here a `files` UploadSet is defined,
     but the client tries to access `photos`
@@ -93,7 +98,7 @@ def test_autoserve_does_not_work_for_non_existing_upload_set(tmp_path):
 
 
 def test_autoserve_gets_deactivated_when_configuring_url_with_empty_string(
-        tmp_path):
+        tmp_path: Path) -> None:
     static = tmp_path / "static"
     static.mkdir()
     image_directory = static / "images"
@@ -117,7 +122,9 @@ def test_autoserve_gets_deactivated_when_configuring_url_with_empty_string(
     assert response.status == "404 NOT FOUND"
 
 
-def test_autoserve_gets_deactivated_when_configuring_uploaded_url(tmp_path):
+def test_autoserve_gets_deactivated_when_configuring_uploaded_url(
+    tmp_path: Path
+) -> None:
     static = tmp_path / "static"
     static.mkdir()
     image_directory = static / "images"
@@ -141,7 +148,9 @@ def test_autoserve_gets_deactivated_when_configuring_uploaded_url(tmp_path):
     assert response.status == "404 NOT FOUND"
 
 
-def test_autoserve_gets_deactivated_when_set_autoserve_to_false(tmp_path):
+def test_autoserve_gets_deactivated_when_set_autoserve_to_false(
+    tmp_path: Path
+) -> None:
     static = tmp_path / "static"
     static.mkdir()
     image_directory = static / "images"

@@ -6,6 +6,10 @@
 
 import os
 import os.path
+from typing import Dict
+from typing import List
+from unittest.mock import Mock
+from unittest.mock import patch
 
 import pytest
 from flask import Flask
@@ -24,7 +28,7 @@ from flask_uploads import lowercase_ext
 
 
 class TestMiscellaneous:
-    def test_tfs(self):
+    def test_tfs(self) -> None:
         tfs = TestingFileStorage(filename='foo.bar')
         assert tfs.filename == 'foo.bar'
         assert tfs.name is None
@@ -32,13 +36,13 @@ class TestMiscellaneous:
         tfs.save('foo_bar.txt')
         assert tfs.saved == 'foo_bar.txt'
 
-    def test_extension(self):
+    def test_extension(self) -> None:
         assert extension('foo.txt') == 'txt'
         assert extension('foo') == ''
         assert extension('archive.tar.gz') == 'gz'
         assert extension('audio.m4a') == 'm4a'
 
-    def test_lowercase_ext(self):
+    def test_lowercase_ext(self) -> None:
         assert lowercase_ext('foo.txt') == 'foo.txt'
         assert lowercase_ext('FOO.TXT') == 'FOO.txt'
         assert lowercase_ext('foo') == 'foo'
@@ -48,7 +52,7 @@ class TestMiscellaneous:
         assert lowercase_ext('audio.m4a') == 'audio.m4a'
         assert lowercase_ext('AUDIO.M4A') == 'AUDIO.m4a'
 
-    def test_addslash(self):
+    def test_addslash(self) -> None:
         assert (addslash('http://localhost:4000') ==
                 'http://localhost:4000/')
         assert (addslash('http://localhost/uploads') ==
@@ -58,7 +62,7 @@ class TestMiscellaneous:
         assert (addslash('http://localhost/uploads/') ==
                 'http://localhost/uploads/')
 
-    def test_custom_iterables(self):
+    def test_custom_iterables(self) -> None:
         assert 'txt' in ALL
         assert 'exe' in ALL
         ax = AllExcept(['exe'])
@@ -70,23 +74,25 @@ Config = UploadConfiguration
 
 
 class TestConfiguration:
-    def setup(self):
+    def setup(self) -> None:
         self.app = Flask(__name__)
 
-    def teardown(self):
+    def teardown(self) -> None:
         del self.app
 
-    def configure(self, *sets, **options):
+    def configure(
+        self, *sets: 'UploadSet', **options: str
+    ) -> Dict[str, UploadConfiguration]:
         self.app.config.update(options)
         configure_uploads(self.app, sets)
-        return self.app.upload_set_config
+        return self.app.upload_set_config  # type: ignore
 
-    def test_compare_upload_configurations(self):
+    def test_compare_upload_configurations(self) -> None:
         """UploadConfigurations are only comparable to UploadConfigurations"""
         rv = Config("/var/files", "http://localhost").__eq__("abc")
         assert rv is NotImplemented
 
-    def test_manual(self):
+    def test_manual(self) -> None:
         f, p = UploadSet('files'), UploadSet('photos')
         setconfig = self.configure(
             f, p,
@@ -99,7 +105,7 @@ class TestConfiguration:
         assert file_conf == Config('/var/files', 'http://localhost:6001/')
         assert photo_conf == Config('/mnt/photos', 'http://localhost:6002/')
 
-    def test_selfserve(self):
+    def test_selfserve(self) -> None:
         f, p = UploadSet('files'), UploadSet('photos')
         setconfig = self.configure(
             f, p,
@@ -110,7 +116,7 @@ class TestConfiguration:
         assert file_conf == Config('/var/files', None)
         assert photo_conf == Config('/mnt/photos', None)
 
-    def test_defaults(self):
+    def test_defaults(self) -> None:
         f, p = UploadSet('files'), UploadSet('photos')
         setconfig = self.configure(
             f, p,
@@ -123,7 +129,7 @@ class TestConfiguration:
         assert photo_conf == Config(
             '/var/uploads/photos', 'http://localhost:6000/photos/')
 
-    def test_default_selfserve(self):
+    def test_default_selfserve(self) -> None:
         f, p = UploadSet('files'), UploadSet('photos')
         setconfig = self.configure(
             f, p,
@@ -133,7 +139,7 @@ class TestConfiguration:
         assert file_conf == Config('/var/uploads/files', None)
         assert photo_conf == Config('/var/uploads/photos', None)
 
-    def test_mixed_defaults(self):
+    def test_mixed_defaults(self) -> None:
         f, p = UploadSet('files'), UploadSet('photos')
         setconfig = self.configure(
             f, p,
@@ -147,7 +153,7 @@ class TestConfiguration:
             '/var/uploads/files', 'http://localhost:6001/files/')
         assert photo_conf == Config('/mnt/photos', 'http://localhost:6002/')
 
-    def test_default_destination_callable(self):
+    def test_default_destination_callable(self) -> None:
         f = UploadSet('files', default_dest=lambda app: os.path.join(
             app.config['INSTANCE'], 'files'
         ))
@@ -164,7 +170,7 @@ class TestConfiguration:
 
 
 class TestPreconditions:
-    def test_filenames(self):
+    def test_filenames(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         namepairs = (
@@ -176,18 +182,20 @@ class TestPreconditions:
             tfs = TestingFileStorage(filename=name)
             assert uset.file_allowed(tfs, name) is result
 
-    def test_underscores_are_not_allowed_for_names_in_upload_sets(self):
+    def test_underscores_are_not_allowed_for_names_in_upload_sets(
+        self
+    ) -> None:
         with pytest.raises(ValueError):
             UploadSet("__not__allowed__")
 
-    def test_default_extensions(self):
+    def test_default_extensions(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         extpairs = (('txt', True), ('jpg', True), ('exe', False))
         for ext, result in extpairs:
             assert uset.extension_allowed(ext) is result
 
-    def test_app_is_properly_configured(self):
+    def test_app_is_properly_configured(self) -> None:
         """`configure_uploads` needs to be called
 
         otherwise a RuntimeError gets raised
@@ -205,23 +213,16 @@ class TestPreconditions:
         assert str(excinfo.value) == expected
 
 
+@patch("os.makedirs", Mock(return_value=None))
 class TestSaving:
-    def setup(self):
-        self.old_makedirs = os.makedirs
-        os.makedirs = lambda v: None
-
-    def teardown(self):
-        os.makedirs = self.old_makedirs
-        del self.old_makedirs
-
-    def test_filestorage_requires_name(self):
+    def test_filestorage_requires_name(self) -> None:
         uset = UploadSet('files')
         # no name passed in here
         tfs = TestingFileStorage()
         with pytest.raises(ValueError):
             uset.save(tfs)
 
-    def test_saved(self):
+    def test_saved(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='foo.txt')
@@ -229,7 +230,7 @@ class TestSaving:
         assert res == 'foo.txt'
         assert tfs.saved == '/uploads/foo.txt'
 
-    def test_save_folders(self):
+    def test_save_folders(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='foo.txt')
@@ -237,7 +238,7 @@ class TestSaving:
         assert res == 'someguy/foo.txt'
         assert tfs.saved == '/uploads/someguy/foo.txt'
 
-    def test_save_named(self):
+    def test_save_named(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='foo.txt')
@@ -245,7 +246,7 @@ class TestSaving:
         assert res == 'file_123.txt'
         assert tfs.saved == '/uploads/file_123.txt'
 
-    def test_save_namedext(self):
+    def test_save_namedext(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='boat.jpg')
@@ -253,7 +254,7 @@ class TestSaving:
         assert res == 'photo_123.jpg'
         assert tfs.saved == '/uploads/photo_123.jpg'
 
-    def test_folder_namedext(self):
+    def test_folder_namedext(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='boat.jpg')
@@ -261,7 +262,7 @@ class TestSaving:
         assert res == 'someguy/photo_123.jpg'
         assert tfs.saved == '/uploads/someguy/photo_123.jpg'
 
-    def test_implicit_folder(self):
+    def test_implicit_folder(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='boat.jpg')
@@ -269,7 +270,7 @@ class TestSaving:
         assert res == 'someguy/photo_123.jpg'
         assert tfs.saved == '/uploads/someguy/photo_123.jpg'
 
-    def test_secured_filename(self):
+    def test_secured_filename(self) -> None:
         uset = UploadSet('files', ALL)
         uset._config = Config('/uploads')
         tfs1 = TestingFileStorage(filename='/etc/passwd')
@@ -281,7 +282,7 @@ class TestSaving:
         assert res2 == 'my_app.wsgi'
         assert tfs2.saved == '/uploads/my_app.wsgi'
 
-    def test_storage_is_not_a_werkzeug_datastructure(self):
+    def test_storage_is_not_a_werkzeug_datastructure(self) -> None:
         """UploadSet.save needs a valid FileStorage object.
 
         When something different is passed in, a TypeError gets raised.
@@ -291,9 +292,9 @@ class TestSaving:
         non_storage = 'this is no werkzeug.datastructure.FileStorage'
 
         with pytest.raises(TypeError):
-            uset.save(non_storage)
+            uset.save(non_storage)  # type: ignore
 
-    def test_file_not_allowed(self):
+    def test_file_not_allowed(self) -> None:
         """Raise UploadNotAllowed for not allowed file extensions."""
         uset = UploadSet('files', ('png'))
         uset._config = Config('/uploads')
@@ -302,32 +303,29 @@ class TestSaving:
             uset.save(testing_filestorage)
 
 
+@patch("os.makedirs", Mock(return_value=None))
 class TestConflictResolution:
-    def setup(self):
-        self.extant_files = []
+    def setup(self) -> None:
+        self.extant_files: List[str] = []
         self.old_exists = os.path.exists
-        os.path.exists = self.exists
-        self.old_makedirs = os.makedirs
-        os.makedirs = lambda v: None
+        os.path.exists = self.exists  # type: ignore
 
-    def teardown(self):
+    def teardown(self) -> None:
         os.path.exists = self.old_exists
         del self.extant_files, self.old_exists
-        os.makedirs = self.old_makedirs
-        del self.old_makedirs
 
-    def extant(self, *files):
+    def extant(self, *files: str) -> None:
         self.extant_files.extend(files)
 
-    def exists(self, file_name):
-        return file_name in self.extant_files
+    def exists(self, file_name: str) -> None:
+        return file_name in self.extant_files  # type: ignore
 
-    def test_self(self):
+    def test_self(self) -> None:
         assert not os.path.exists('/uploads/foo.txt')
         self.extant('/uploads/foo.txt')
         assert os.path.exists('/uploads/foo.txt')
 
-    def test_conflict(self):
+    def test_conflict(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='foo.txt')
@@ -335,7 +333,7 @@ class TestConflictResolution:
         res = uset.save(tfs)
         assert res == 'foo_1.txt'
 
-    def test_multi_conflict(self):
+    def test_multi_conflict(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='foo.txt')
@@ -344,7 +342,7 @@ class TestConflictResolution:
         res = uset.save(tfs)
         assert res == 'foo_6.txt'
 
-    def test_conflict_without_extension(self):
+    def test_conflict_without_extension(self) -> None:
         uset = UploadSet('files', extensions=(''))
         uset._config = Config('/uploads')
         tfs = TestingFileStorage(filename='foo')
@@ -354,7 +352,7 @@ class TestConflictResolution:
 
 
 class TestPathsAndURLs:
-    def test_path(self):
+    def test_path(self) -> None:
         uset = UploadSet('files')
         uset._config = Config('/uploads')
         assert uset.path('foo.txt') == '/uploads/foo.txt'
@@ -364,7 +362,7 @@ class TestPathsAndURLs:
         assert (uset.path('foo/bar.txt', folder='someguy') ==
                 '/uploads/someguy/foo/bar.txt')
 
-    def test_url_generated(self):
+    def test_url_generated(self) -> None:
         app = Flask(__name__)
         app.config.update(
             UPLOADED_FILES_DEST='/uploads'
@@ -378,7 +376,7 @@ class TestPathsAndURLs:
                           filename='foo.txt', _external=True)
             assert url == gen
 
-    def test_url_based(self):
+    def test_url_based(self) -> None:
         app = Flask(__name__)
         app.config.update(
             UPLOADED_FILES_DEST='/uploads',
@@ -392,7 +390,7 @@ class TestPathsAndURLs:
         assert '_uploads' not in app.blueprints
 
 
-def test_configure_for_set_throws_runtimeerror():
+def test_configure_for_set_throws_runtimeerror() -> None:
     """when there is no destination for an UploadSet"""
     upload_set = UploadSet("files")
     app = Flask(__name__)

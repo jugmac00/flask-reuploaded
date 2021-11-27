@@ -91,7 +91,9 @@ def config_for_set(
         destination, base_url, allow_extensions, deny_extensions)
 
 
-def configure_uploads(app: Flask, upload_sets: Iterable['UploadSet']) -> None:
+def configure_uploads(
+    app: Flask, upload_sets: Union['UploadSet', Iterable['UploadSet']]
+) -> None:
     """
     Call this after the app has been configured. It will go through all the
     upload sets, get their configuration, and store the configuration on the
@@ -197,7 +199,7 @@ class UploadSet:
             raise ValueError("Name must be alphanumeric (no underscores)")
         self.name = name
         self.extensions = extensions
-        self._config = None
+        self._config: Optional[UploadConfiguration] = None
         self.default_dest = default_dest
 
     @property
