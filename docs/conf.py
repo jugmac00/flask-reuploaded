@@ -59,3 +59,15 @@ html_static_path = ['']
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 html_last_updated_fmt = '%Y-%m-%d'
+
+
+html_sidebars = {
+    "**": [
+        'project.html',
+        'globaltoc.html',
+        'localtoc.html',
+        'relations.html',
+        'searchbox.html',
+        'ethicalads.html',
+    ],
+}

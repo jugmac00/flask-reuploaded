@@ -8,7 +8,13 @@ recursive-include tests *.py
 # make type checkers aware of type annotations
 include src/flask_uploads/py.typed
 
+# include all docs
+recursive-include docs *.in
 recursive-include docs *.txt
+recursive-include docs *.rst
 include docs/conf.py
 include docs/index.rst
-recursive-include docs *.in
+# include examples
+recursive-include examples *.html
+recursive-include examples *.py
+recursive-include examples *.rst
