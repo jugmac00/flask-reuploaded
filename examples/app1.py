@@ -7,8 +7,18 @@ In this example:
 In next example, We will try the auto-serving feature.
 """
 import os
-from flask import Flask, render_template, request, current_app, redirect, url_for, abort, send_from_directory
-from flask_uploads import configure_uploads, IMAGES, UploadSet
+
+from flask import Flask
+from flask import abort
+from flask import current_app
+from flask import redirect
+from flask import render_template
+from flask import request
+from flask import send_from_directory
+from flask import url_for
+from flask_uploads import IMAGES
+from flask_uploads import UploadSet
+from flask_uploads import configure_uploads
 
 # Fake database
 db = {}
