@@ -20,18 +20,24 @@
 Flask-Reuploaded
 ================
 
-Flask-Reuploaded provides file uploads for Flask.
+*Flask-Reuploaded Provides file uploads for Flask.*
+
+Installation
+------------
+
+.. code-block:: bash
+
+    $ pip install `Flask-Reuploaded`
 
 
 Notes on this package
 ---------------------
 
 This is an independently maintained version of `Flask-Uploads`
-based on the 0.2.1 version of the original,
-but also including four years of unreleased changes,
-at least not released to PyPI.
+including four years of unreleased changes, at least not released to PyPI.
 
 Noteworthy is the fix for the `Werkzeug` API change.
+Please see the migration guide from `flask-uploads`
 
 
 Goals
@@ -42,88 +48,12 @@ Goals
 - provide working PyPI packages
 
 
-Migration guide from `Flask-Uploads`
-------------------------------------
-
-Incompatibilities between Flask-Reuploaded and Flask-Uploads
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-As already mentioned,
-staying compatible with `Flask-Uploads` is one of this project's goals.
-
-Nevertheless, there are the following known incompatibilities:
-
-- the `patch_request_class` helper function has been removed;
-  the function was only necessary for Flask 0.6 and earlier.
-  Since then you can use Flask's own
-  `MAX_CONTENT_LENGTH <https://flask.palletsprojects.com/en/1.1.x/config/#MAX_CONTENT_LENGTH>`_
-  environment variable,
-  so you don’t read more than this many bytes from the incoming request data.
-- `autoserve` of uploaded images now has been deactivated;
-  this was a poorly documented "feature",
-  which even could have lead to unwanted data disclosure;
-  if you want to activate the feature again,
-  you need to set `UPLOADS_AUTOSERVE=True`
-
-Uninstall and install
-~~~~~~~~~~~~~~~~~~~~~
-
-If you have used `Flask-Uploads` and want to migrate to `Flask-Reuploaded`,
-you only have to install `Flask-Reuploaded` instead of `Flask-Uploads`.
-
-That's all!
-
-So, if you use `pip` to install your packages, instead of ...
-
-.. code-block:: bash
-
-    $ pip install `Flask-Uploads`  # don't do this! package is broken
-
-... just do ...
-
-.. code-block:: bash
-
-    $ pip install `Flask-Reuploaded`
-
-`Flask-Reuploaded` is a drop-in replacement.
-
-This means you do not have to change a single line of code.
-
-
-Installation
-------------
-
-.. code-block:: bash
-
-    $ pip install Flask-Reuploaded
-
-
-Getting started
----------------
-
-create an UploadSet
-
-.. code-block:: python
-
-    from flask_uploads import IMAGES
-
-    photos = UploadSet("photos", IMAGES)
-
-configure your Flask app and this extension
-
-.. code-block:: python
-
-    app.config["UPLOADED_PHOTOS_DEST"] = "static/img"
-    app.config["SECRET_KEY"] = os.urandom(24)
-    configure_uploads(app, photos)
-
-use `photos` in your view function
-
-.. code-block:: python
-
-    photos.save(request.files['photo'])
-
-See below for a complete example.
+Links:
+------
+- documentation: https://flask-reuploaded.readthedocs.io/
+- Source: https://github.com/jugmac00/flask-reuploaded
+- Pypi: https://pypi.org/project/Flask-Reuploaded/
+- Example Application [Examples dir](examples/)
 
 
 Documentation
@@ -145,98 +75,6 @@ You can update the dependencies for documentation generation:
 
     tox -e upgradedocs
 
-
-Minimal example application
-----------------------------
-
-
-Application code, e.g. main.py
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    import os
-
-    from flask import Flask, flash, render_template, request
-    # please note the import from `flask_uploads` - not `flask_reuploaded`!!
-    # this is done on purpose to stay compatible with `Flask-Uploads`
-    from flask_uploads import IMAGES, UploadSet, configure_uploads
-
-    app = Flask(__name__)
-    photos = UploadSet("photos", IMAGES)
-    app.config["UPLOADED_PHOTOS_DEST"] = "static/img"
-    app.config["SECRET_KEY"] = os.urandom(24)
-    configure_uploads(app, photos)
-
-
-    @app.route("/", methods=['GET', 'POST'])
-    def upload():
-        if request.method == 'POST' and 'photo' in request.files:
-            photos.save(request.files['photo'])
-            flash("Photo saved successfully.")
-            return render_template('upload.html')
-        return render_template('upload.html')
-
-
-HTML code for `upload.html`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: html
-
-    <!doctype html>
-    <html lang=en>
-    <head>
-        <meta charset=utf-8>
-        <title>Flask-Reuploaded Example</title>
-    </head>
-    <body>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-
-    <form method=POST enctype=multipart/form-data action="{{ url_for('upload') }}">
-        <input type=file name=photo>
-        <button type="submit">Submit</button>
-    </form>
-    </body>
-    </html>
-
-
-Project structure
-~~~~~~~~~~~~~~~~~
-
-The project structure would look as following...
-
-.. code-block:: bash
-
-    ❯ tree -I "__*|h*"
-    .
-    ├── main.py
-    ├── static
-    │   └── img
-    └── templates
-        └── upload.html
-
-
-Running the example application
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In order to run the application,
-you have to enter the following commands...
-
-.. code-block:: bash
-
-    ❯ export FLASK_APP=main.py
-
-    ❯ flask run
-
-Then point your browser to `http://127.0.0.1:5000/`.
 
 
 Contributing
