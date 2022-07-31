@@ -17,3 +17,6 @@ dist/
 
 # documentation
 docs/_build/*
+
+# venv
+.venv/*
