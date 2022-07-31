@@ -20,3 +20,6 @@ docs/_build/*
 
 # venv
 .venv/*
+
+# ignore static files of examples
+examples/static/*
