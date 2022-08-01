@@ -8,12 +8,8 @@ In this example:
 import os
 
 from flask import Flask
-from flask import abort
-from flask import current_app
-from flask import redirect
 from flask import render_template
 from flask import request
-from flask import send_from_directory
 from flask import url_for
 from flask_uploads import IMAGES
 from flask_uploads import UploadSet
@@ -38,19 +34,22 @@ photos = UploadSet("photos", IMAGES)
 # Configure uploads
 configure_uploads(app, photos)
 # Set routes
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def upload():
-    if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
+    if request.method == "POST" and "photo" in request.files:
+        filename = photos.save(request.files["photo"])
         # We set UPLOADS_AUTOSERVE flag to True
         # So, We can serve files from the `_upload.uploaded_file` endpoint
         # it takes 2 parameters, first is the setname, second is the filename
-        url_by_filename = url_for('_uploads.uploaded_file', setname=photos.name, filename=filename)
-        return render_template('upload.html',  url_by_filename=url_by_filename)
-        
-    return render_template('upload.html')
+        url_by_filename = url_for(
+            "_uploads.uploaded_file", setname=photos.name, filename=filename
+        )
+        return render_template("upload.html", url_by_filename=url_by_filename)
 
-# No need for manual serving, 
+    return render_template("upload.html")
+
+
+# No need for manual serving,
 # @app.route('/show/<setname>/<filename>')
 # def show(setname, filename):
 #     # We know that we have only one set `photos`
@@ -64,4 +63,3 @@ def upload():
 
 if __name__ == "__main__":
     app.run()
-   

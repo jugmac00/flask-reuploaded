@@ -11,7 +11,6 @@ import os
 from flask import Flask
 from flask import abort
 from flask import current_app
-from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
@@ -36,48 +35,55 @@ photos = UploadSet("photos", IMAGES)
 # Configure uploads
 configure_uploads(app, photos)
 # Set routes
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def upload():
-    if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
+    if request.method == "POST" and "photo" in request.files:
+        filename = photos.save(request.files["photo"])
         # save info in the DB
-        db.setdefault("files", []).append(dict(setname=photos.name, filename=filename))
+        db.setdefault("files", []).append(
+            dict(setname=photos.name, filename=filename)
+        )
         # generate file urls
-        url_by_filename = url_for('show', setname=photos.name, filename=filename)
-        url_by_id = url_for('show_by_id', id=len(db["files"])-1)
-        return render_template('upload.html',  url_by_filename=url_by_filename, url_by_id=url_by_id)
-        
-        # return redirect(url_for('show', setname=photos.name, filename=filename))
-    return render_template('upload.html')
+        url_by_filename = url_for(
+            "show", setname=photos.name, filename=filename
+        )
+        url_by_id = url_for("show_by_id", id=len(db["files"]) - 1)
+        return render_template(
+            "upload.html", url_by_filename=url_by_filename, url_by_id=url_by_id
+        )
 
-@app.route('/show/<setname>/<filename>')
+        # return redirect(url_for('show', setname=photos.name, filename=filename))
+    return render_template("upload.html")
+
+
+@app.route("/show/<setname>/<filename>")
 def show(setname, filename):
     # We know that we have only one set `photos`
     # & we can get its configs directly:. `photos.config.destination`
     # But, The following approach show how to get the configs in more complex scenario.
     config = current_app.upload_set_config.get(setname)  # type: ignore
-    
+
     if config is None:
         abort(404)
     return send_from_directory(config.destination, filename)
 
 
-@app.route('/show/<int:id>')
+@app.route("/show/<int:id>")
 def show_by_id(id):
-    
+
     # We know that we have only one set `photos`
     # & we can get its configs directly:. `photos.config.destination`
     # But, The following approach show how to get the configs in more complex scenario.
     try:
         photo = db.get("files", [])[id]
-    except IndexError :
-        abort (404)
+    except IndexError:
+        abort(404)
     setname = photo.get("setname")
     filename = photo.get("filename")
-    config = current_app.upload_set_config.get(setname)  # type: ignore    
+    config = current_app.upload_set_config.get(setname)  # type: ignore
     if config is None:
         abort(404)
-    
+
     return send_from_directory(config.destination, filename)
 
 
