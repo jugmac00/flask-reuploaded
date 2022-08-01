@@ -9,7 +9,7 @@ Flask-Reuploaded
 This extension allows your application to flexibly and efficiently handle file
 uploading and serving the uploaded files.
 You can create different sets of uploads - one for document attachments, one
-for photos, etc. - and the application can be configured to save them all in
+for photos, etc. and the application can be configured to save them all in
 different places and to generate different URLs for them.
 
 
@@ -20,15 +20,15 @@ This is an independently maintained version of `Flask-Uploads`
 including four years of unreleased changes, at least not released to PyPI.
 
 Noteworthy is the fix for the `Werkzeug` API change.
-Please see the migration guide from `flask-uploads`
+Please see the migration guide from `flask-Uploads`
 
 
 Goals
 -----
 
-- provide a stable drop-in replacement for `Flask-Uploads`
-- regain momentum for this widely used package
-- provide working PyPI packages
+- provide a stable drop-in replacement for `Flask-Uploads`.
+- regain momentum for this widely used package.
+- provide working PyPI packages.
 
 
 Contents

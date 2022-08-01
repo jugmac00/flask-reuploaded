@@ -52,9 +52,8 @@ The following code snippets explains how to quickly integrate the extension in y
         
         # Your files are located here
         url_for('_uploads.uploaded_file', setname=photos.name, filename=filename)
-        # uploadset : is the `UploadSet` instance you have created in step:. 1
+        # photos : is the `UploadSet` instance you have created in step:. 1
         # In our example, the `photos.name` equals 'photos'
         # File name is the value returned from 
-        # `photos.save(request.files['photo'])`
-        # You got in step:. 3
+        # `photos.save(request.files['photo'])` You got in step:. 3
         
