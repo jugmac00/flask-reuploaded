@@ -1,10 +1,11 @@
 """
-Example application for simple usage of `flask-reuploaded` extension.
-In this example:
-- We upload images.
-- serve them manually.
-- Show, How to use database storage to serve the files.
-In next example, We will try the auto-serving feature.
+Example application for simple usage of `flask-reuploaded` extension. In this
+example: 
+ - We upload images. 
+ - serve them manually.
+ - Show, How to use database
+storage to serve the files. In next example, We will try the auto-serving
+feature.
 """
 import os
 
@@ -51,8 +52,6 @@ def upload():
         return render_template(
             "upload.html", url_by_filename=url_by_filename, url_by_id=url_by_id
         )
-
-        # return redirect(url_for('show', setname=photos.name, filename=filename))
     return render_template("upload.html")
 
 
@@ -60,7 +59,8 @@ def upload():
 def show(setname, filename):
     # We know that we have only one set `photos`
     # & we can get its configs directly:. `photos.config.destination`
-    # But, The following approach show how to get the configs in more complex scenario.
+    # But, The following approach show how to get the configs in more complex
+    # scenario.
     config = current_app.upload_set_config.get(setname)  # type: ignore
 
     if config is None:
