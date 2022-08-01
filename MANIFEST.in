@@ -17,3 +17,4 @@ include docs/index.rst
 # include examples
 recursive-include examples *.html
 recursive-include examples *.py
+recursive-include examples *.rst
