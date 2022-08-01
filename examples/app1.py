@@ -1,9 +1,9 @@
 """
 Example application for simple usage of `flask-reuploaded` extension. In this
-example: 
- - We upload images. 
- - serve them manually.
- - Show, How to use database
+example:
+- We upload images.
+- serve them manually.
+- Show, How to use database
 storage to serve the files. In next example, We will try the auto-serving
 feature.
 """
@@ -35,6 +35,8 @@ app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(app.root_path, "static/img")
 photos = UploadSet("photos", IMAGES)
 # Configure uploads
 configure_uploads(app, photos)
+
+
 # Set routes
 @app.route("/", methods=["GET", "POST"])
 def upload():
@@ -70,10 +72,9 @@ def show(setname, filename):
 
 @app.route("/show/<int:id>")
 def show_by_id(id):
-
-    # We know that we have only one set `photos`
-    # & we can get its configs directly:. `photos.config.destination`
-    # But, The following approach show how to get the configs in more complex scenario.
+    # We know that we have only one set `photos` & we can get its configs
+    # directly:. `photos.config.destination` But, The following approach show
+    # how to get the configs in more complex scenario.
     try:
         photo = db.get("files", [])[id]
     except IndexError:

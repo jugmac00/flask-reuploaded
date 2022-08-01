@@ -23,17 +23,21 @@ app = Flask(__name__)
 # But I use absolute path for this example to give the same path
 # whatever the `cwd`.
 app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(app.root_path, "static/img")
-#######################################
-######  Set autoserving feature  ######
-#######################################
+# -------------------------------------
+#  Set autoserving feature           #
+# -------------------------------------
 app.config["UPLOADS_AUTOSERVE"] = True
-#######################################
-#######################################
+# --------------------------------------------
 # Create upload set
 photos = UploadSet("photos", IMAGES)
 # Configure uploads
 configure_uploads(app, photos)
-# Set routes
+
+# ------------------#
+# Set routes        #
+# -------------------#
+
+
 @app.route("/", methods=["GET", "POST"])
 def upload():
     if request.method == "POST" and "photo" in request.files:
@@ -52,9 +56,6 @@ def upload():
 # No need for manual serving,
 # @app.route('/show/<setname>/<filename>')
 # def show(setname, filename):
-#     # We know that we have only one set `photos`
-#     # & we can get its configs directly:. `photos.config.destination`
-#     # But, The following approach show how to get the configs in more complex scenario.
 #     config = current_app.upload_set_config.get(setname)  # type: ignore
 #     if config is None:
 #         abort(404)
