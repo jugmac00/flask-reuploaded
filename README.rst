@@ -53,7 +53,9 @@ Links:
 - documentation: https://flask-reuploaded.readthedocs.io/
 - Source: https://github.com/jugmac00/flask-reuploaded
 - Pypi: https://pypi.org/project/Flask-Reuploaded/
-- Example Application [Examples](examples/example.rst)
+- Example Application https://github.com/jugmac00/flask-reuploaded/blob/master/examples/example.rst
+..
+    _This link is broken uptill merging the pull request
 
 
 Documentation
