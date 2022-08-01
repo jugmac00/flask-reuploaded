@@ -2,9 +2,9 @@ Minimal example application
 ----------------------------
 
 Please have a look at [The examples](https://github.com/jugmac00/flask-reuploaded/tree/master/examples)
-.. 
-  This Link is not valid at time of writing
-  
+
+..    
+    _Comment: _Comment: This link is broken at time of writing. 
 
 Running the example application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
