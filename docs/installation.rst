@@ -6,7 +6,7 @@ Installation
     $ pip install Flask-Reuploaded
 
 
-Migration guide from `Flask-Uploads`
+Migration Guide From `Flask-Uploads`
 ------------------------------------
 
 This package is a drop-in replacement of broken `flask-uploads`.
@@ -25,7 +25,7 @@ If you have used `Flask-Uploads` and want to migrate to `Flask-Reuploaded`:
 This means you do not have to change a single line of code.
 
 
-Incompatibilities between Flask-Reuploaded and Flask-Uploads
+Incompatibilities Between Flask-Reuploaded and Flask-Uploads
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As already mentioned, staying compatible with `Flask-Uploads` is one of this 

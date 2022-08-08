@@ -1,4 +1,4 @@
-Minimal example application
+Minimal Example Application
 ----------------------------
 
 Please have a look at [The examples](https://github.com/jugmac00/flask-reuploaded/tree/master/examples)
@@ -6,7 +6,7 @@ Please have a look at [The examples](https://github.com/jugmac00/flask-reuploade
 ..    
     _Comment: _Comment: This link is broken at time of writing. 
 
-Running the example application
+Running the Example Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to run the application,

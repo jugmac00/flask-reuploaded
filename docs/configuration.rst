@@ -1,8 +1,8 @@
 Configuration
 =============
 
-UploadSet configuration:
-------------------------
+UploadSet Configuration
+-----------------------
 
 You can create as many as you need of `UploadSet`s. The `UploadSet` object
 follow a special syntax of naming the configuration keys, the `Flask-Reuploaded`
@@ -71,8 +71,8 @@ directory, unless you will get `RuntimeError` exception. To avoid this error you
 should set `UPLOADED_[SETNAME]_DEST` or `UPLOADS_DEFAULT_DEST`. 
 
 
-Autoserve configuration:
-------------------------
+Autoserve Configuration
+-----------------------
 
 `UPLOADS_AUTOSERVE`
 Setting this configuration to `True` enables automatic viewing/downloading of uploaded files.
@@ -97,8 +97,8 @@ If you want to serve the uploaded files via http, and you expect heavy traffic,
 you should think about serving the files directly by a web/proxy server as e.g. Nginx.
 
 
-Maximum File Length Configuration:
-----------------------------------
+Maximum File Length Configuration
+---------------------------------
 
 By default Flask doesn't put any limits on the size of the uploaded data. To
 limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH` as

@@ -19,8 +19,8 @@ during saving & retrieving the uploaded file, `UploadSet` perform some security
 checks for you.
 
 
-Security Checks:
-----------------
+Security Checks
+---------------
 
 Security itself is a huge subject and you should consider designing it
 seriously. This extension is not intended by first intention to protect your
@@ -52,8 +52,8 @@ but worth mentioned here.
 
 
 
-Default Dest Callable Parameter:
---------------------------------
+Default Dest Callable Parameter
+-------------------------------
 
 `UploadSet` constructor can accept ``default_dest`` parameter, it is callable
 that takes the application as its argument & returns the destination path for
