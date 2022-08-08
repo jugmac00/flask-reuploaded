@@ -16,12 +16,10 @@ different places and to generate different URLs for them.
 Notes on this package
 ---------------------
 
-This is an independently maintained version of `Flask-Uploads`
-including several years of unreleased changes, at least not released to PyPI.
-
-Noteworthy is the fix for the `Werkzeug` API change.
-Please see the migration guide from `Flask-Uploads`
-
+This is an independently maintained version of `Flask-Uploads` including
+several years of unreleased changes, at least not released to PyPI. Noteworthy
+is the fix for the `Werkzeug` API change. If you have used `Flask-Uploads` and
+want to migrate to `Flask-Reuploaded`, please see the :ref:`migration-guide` .
 
 Goals
 -----
