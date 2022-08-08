@@ -4,7 +4,7 @@ Flask-Reuploaded
 
 .. currentmodule:: flask_uploads
 
-*Flask-Reuploaded Provides file uploads for Flask.*
+Flask-Reuploaded provides file uploads for Flask.
 
 This extension allows your application to flexibly and efficiently handle file
 uploading and serving the uploaded files.
@@ -17,18 +17,18 @@ Notes on this package
 ---------------------
 
 This is an independently maintained version of `Flask-Uploads`
-including four years of unreleased changes, at least not released to PyPI.
+including several years of unreleased changes, at least not released to PyPI.
 
 Noteworthy is the fix for the `Werkzeug` API change.
-Please see the migration guide from `flask-Uploads`
+Please see the migration guide from `Flask-Uploads`
 
 
 Goals
 -----
 
-- provide a stable drop-in replacement for `Flask-Uploads`.
-- regain momentum for this widely used package.
-- provide working PyPI packages.
+- provide a stable drop-in replacement for `Flask-Uploads`
+- regain momentum for this widely used package
+- provide working PyPI packages
 
 
 Contents
@@ -43,8 +43,8 @@ Contents
    Installation <installation>
    Getting started <getting_started>
    Configuration <configuration>
-   minimal Application <minimal_app>
-   explanation <explanation>   
-   api <api>
-   versions <versions>
-   contributing <contributing>
+   Minimal Application <minimal_app>
+   Explanation <explanation>   
+   API <api>
+   Versions <versions>
+   Contributing <contributing>
