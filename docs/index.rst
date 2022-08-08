@@ -47,4 +47,4 @@ Contents
    Explanation <explanation>   
    API <api>
    Versions <versions>
-   Contributing <contributing>
+   Contributing <contributing_link>
