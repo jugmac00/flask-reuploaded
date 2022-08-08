@@ -4,8 +4,8 @@ Configuration
 UploadSet Configuration
 -----------------------
 
-You can create as many `UploadSet`s. as you need. The `UploadSet` object
-follows a special syntax of naming the configuration keys. The `Flask-Reuploaded`
+You can create as many `UploadSet`s as you need. The `UploadSet` object
+follows a special syntax for naming the configuration keys. The `Flask-Reuploaded`
 extension will attach each `UploadSet` with its configuration according to this
 syntax:
 
@@ -23,21 +23,21 @@ keys:
 - `UPLOADED_FILES_DENY`
 
 
-The following is the description of each configuration item.
+The following is the description of each configuration key.
 
 +---------------------------+--------------------------------------------------+
 |         Config Key        |                 Description                      |
 +===========================+==================================================+
 |   UPLOADED_FILES_DEST     | This indicates the directory that the uploaded   |
-|                           | files will will be saved to.                     |  
+|                           | files will be saved to.                          |  
 +---------------------------+--------------------------------------------------+
 |   UPLOADED_FILES_URL      | If you have a server set up to serve the files   |
 |                           | for this set, this should be the URL they are    |
-|                           | publicly accessible from. Include a trailing     |
+|                           | publicly accessible from. Including a trailing   |
 |                           | slash.                                           |
 +---------------------------+--------------------------------------------------+
-|   UPLOADED_FILES_ALLOW    | Allows additional file extensions not allowed by | 
-|                           | the used upload set.                             |
+|   UPLOADED_FILES_ALLOW    | This config allows additional file extensions    | 
+|                           | not allowed by the used upload set.              |
 +---------------------------+--------------------------------------------------+
 |   UPLOADED_FILES_DENY     | Denies file extensions allowed by the used       | 
 |                           | upload set                                       |
@@ -69,8 +69,8 @@ that apply as "defaults" if you don't provide the proper settings otherwise.
 |                           | Include the trailing slash.                      |
 +---------------------------+--------------------------------------------------+
 
-You should ensure that each `UploadSet` you are creating had set its destination
-directory, otherwise you will get a `RuntimeError` exception. To avoid this error you
+You should ensure that each `UploadSet` you are creating has set its destination
+directory, otherwise you will get a `RuntimeError` exception. To avoid this error, you
 should set `UPLOADED_[SETNAME]_DEST` or `UPLOADS_DEFAULT_DEST`. 
 
 
@@ -97,15 +97,15 @@ if you are running your server on localhost at port 5000 (The flask default)
 Since version `1.0.0` it is `False` by default.``
 
 If you want to serve the uploaded files via http, and you expect heavy traffic,
-you should think about serving the files directly by a web/proxy server as e.g. Nginx.
+you should think about serving the files directly via a web/proxy server, such as e.g. Nginx.
 
 
 Maximum File Length Configuration
 ---------------------------------
 
-By default Flask doesn't put any limits on the size of the uploaded data. To
+By default, Flask doesn't put any limits on the size of the uploaded data. To
 limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH` as
-documented by Flask_.
+documented by Flask_ .
 
 .. _Flask: https://flask.palletsprojects.com/en/2.1.x/patterns/fileuploads/#improving-uploads
 
