@@ -35,11 +35,10 @@ Contents
 .. toctree::
    :titlesonly:
    :maxdepth: 1
-   :caption: Contents:
 
    self
    Installation <installation>
-   Getting started <getting_started>
+   Getting Started <getting_started>
    Configuration <configuration>
    Minimal Application <minimal_app>
    Explanation <explanation>   
