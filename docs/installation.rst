@@ -11,14 +11,14 @@ Installation
 Migration Guide From 'Flask-Uploads'
 ------------------------------------
 
-This package is a drop-in replacement of broken `flask-uploads`.
+This package is a drop-in replacement of unmaintained `Flask-Uploads`.
 If you have used `Flask-Uploads` and want to migrate to `Flask-Reuploaded`:
 
 .. code-block:: bash
 
     $ pip uninstall `Flask-Uploads`
 
-... Then ...
+... then ...
 
 .. code-block:: bash
 
@@ -28,7 +28,7 @@ This means you do not have to change a single line of code.
 
 
 Incompatibilities Between Flask-Reuploaded and Flask-Uploads
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------------------------------
 
 As already mentioned, staying compatible with `Flask-Uploads` is one of this 
 project's goals.
