@@ -1,11 +1,7 @@
 """
-Example application for simple usage of `flask-reuploaded` extension. In this
-example:
-- We upload images.
-- serve them manually.
-- Show, How to use database
-storage to serve the files. In next example, We will try the auto-serving
-feature.
+Example application for simple usage of the `Flask-Reuploaded` extension. 
+In this example, You will be able to upload files, serve them and figure out
+how to integrate with database backend.
 """
 import os
 
@@ -26,10 +22,6 @@ db = {}
 # Define app
 app = Flask(__name__)
 # set app config
-# The uploaded photo destination,
-# Simply, You can use relative path like `static/img`
-# But I use absolute path for this example to give the same path
-# whatever the `cwd`.
 app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(app.root_path, "static/img")
 # Create upload set
 photos = UploadSet("photos", IMAGES)
@@ -60,8 +52,8 @@ def upload():
 @app.route("/show/<setname>/<filename>")
 def show(setname, filename):
     # We know that we have only one set `photos`
-    # & we can get its configs directly:. `photos.config.destination`
-    # But, The following approach show how to get the configs in more complex
+    # and we can get its configs directly:. `photos.config.destination`
+    # But, the following approach show how to get the configs in more complex
     # scenario.
     config = current_app.upload_set_config.get(setname)  # type: ignore
 
