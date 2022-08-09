@@ -23,3 +23,4 @@ docs/_build/*
 
 # ignore static files of examples
 examples/static/*
+examples/*/static/*
