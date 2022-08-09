@@ -1,13 +1,10 @@
 """
-Example 2:
-Example application for  usage of `flask-reuploaded` extension.
-In this example:
-- We upload image to specific path
-- configure autoserving.
+In this example, you will be able to configure autoserving.
 """
 import os
 
 from flask import Flask
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
@@ -18,37 +15,26 @@ from flask_uploads import configure_uploads
 # Define app
 app = Flask(__name__)
 # set app config
-# The uploaded photo destination,
-# Simply, In most cases, You can use relative path like `static/img`
-# But I use absolute path for this example to give the same path
-# whatever the `cwd`.
 app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(app.root_path, "static/img")
-# -------------------------------------
-#  Set autoserving feature           #
-# -------------------------------------
+# Set `UPLOADS_AUTOSERVE` to `True`, it is `False` by default
 app.config["UPLOADS_AUTOSERVE"] = True
-# --------------------------------------------
 # Create upload set
 photos = UploadSet("photos", IMAGES)
 # Configure uploads
 configure_uploads(app, photos)
-
-# ------------------#
-# Set routes        #
-# -------------------#
 
 
 @app.route("/", methods=["GET", "POST"])
 def upload():
     if request.method == "POST" and "photo" in request.files:
         filename = photos.save(request.files["photo"])
-        # We set UPLOADS_AUTOSERVE flag to True
-        # So, We can serve files from the `_upload.uploaded_file` endpoint
+        # Serve files from the `_upload.uploaded_file` endpoint
         # it takes 2 parameters, first is the setname, second is the filename
-        url_by_filename = url_for(
+        url = url_for(
             "_uploads.uploaded_file", setname=photos.name, filename=filename
         )
-        return render_template("upload.html", url_by_filename=url_by_filename)
+        print("Url: ", url)
+        return redirect(url)
 
     return render_template("upload.html")
 
