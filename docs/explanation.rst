@@ -4,7 +4,7 @@ Explanation
 
 Upload Sets
 -----------
-``UploadSet`` is the main object provided by the `FlaskReuploaded` extension.
+``UploadSet`` is the main object provided by the `FlaskReuploaded` extension. 
 Each `UploadSet` is responsible for dealing with a set of files. You have to initialize
 `UploadSet` by calling its constructor and passing it the required first
 parameter `name`:
@@ -27,6 +27,7 @@ save uploaded files and the `UploadConfiguration` to serve them.
 During saving and serving the uploaded files, the `UploadSet` object performs
 some security checks for you.
 
+
 .. _security-checks:
 
 Security Checks
@@ -42,11 +43,11 @@ some common attack vectors and user errors. For example:
 e.g. `.`, '..', '../../../home/{username}/.bash' or '../../my_app.wsgi'. if a
 user tries to upload a file with such a filename, the file will be renamed.
 
-- Users can't overwrite other users' files i.e., `similar filenames are suffixed by a number`.
+- Users can't overwrite other users' files, i.e., `similar filenames are suffixed by a number`.
 - Users can't upload files with extension suffixes that are not allowed by the ``UploadSet``.
 
 You are advised to read the source code to explore the mechanism of dealing
-with each error/attack and you may decide to take additional actions.
+with each error/attack, and you may decide to take additional actions.
 
 
 Maximum Allowed File Size
@@ -69,23 +70,24 @@ extension but worth mentioning here.
 `UploadSet` `DEST` Configuration
 --------------------------------
 
-As mentioned in the :ref:`configuration`, the `UploadSet` object should
-know its destination. When you call `configure_uploads` function, the
-`UploadSet` tries to set its destination path by the following order:
+Each `UploadSet` object should know its destination path to store the uploaded
+files in. When you call `configure_uploads` function, the `UploadSet` object
+tries to set its destination path following this order:
 
 -  `UPLOADED_[1]_DEST` where is [1] is a capitalized `UploadSet` name
 -  The return value of the :ref:`default_dest` if present
 -  Subdirectory in the `UPLOADS_DEFAULT_DEST` if present. The name of the
    subdirectory is the same name of the `UploadSet`
--  Raise `RuntimeError`
+
+If all these trials failed, a `RuntimeError` will be raised.
 
 
 .. _default_dest:
 
-``default_dest`` Callable Parameter
------------------------------------
+``default_dest`` 
+----------------
 
-The `UploadSet` constructor can accept ``default_dest`` parameter, it is a callable
+The `UploadSet` constructor can accept a ``default_dest`` parameter. It is a callable
 that takes the application as its argument and returns the destination path for
 this set.
 
@@ -98,27 +100,29 @@ For example::
             
         media = UploadSet('media', default_dest=set_destination )
 
-This will save your uploads in the ``app.instance_path/uploads``
+This will save your uploads in the ``app.instance_path/uploads``.
 
 
 .. _configure_uploads:
 
-`configure_uploads` Function
-----------------------------
+`configure_uploads`
+-------------------
 
 You have to call the `configure_uploads` function after the app has been
 configured. The `configure_uploads` function is responsible for creating the
 `UploadConfiguration`'s and storing them on the application instance.
 
-Storing the `UploadConfiguration` on the application instance enables you to
-get it when you need to serve the files from the `UploadSet`. The
-`current_app.upload_set_config` is a dictionary of `UploadSet` names mapped to
-their corresponding `UploadConfiguration` objects.
-
 The `configure_uploads` function accepts two parameters. The first is the
 `Flask` application instance and the second is either an UploadSet instance or
 iterable of UploadSet instances. It is safe to call the `configure_uploads`
 function more than once.
+
+The `configure_uploads` function sets `upload_set_config` attribute on the
+application instance. It is a dictionary of `UploadSet` names mapped to
+their corresponding `UploadConfiguration` objects. This way, You are able to
+get the `UploadConfiguration` in your view functions from
+``current_app.upload_set_config['setname']`` when you need to serve the files,
+see :ref:`serving_files`. 
 
 
 Multithreaded Application
@@ -150,33 +154,38 @@ with another type will raise ``TypeError``. You can get a
 ``werkzeug.datastructures.FileStorage`` object by accessing the 
 ``flask.request.files`` dictionary.
 
-The ``UploadSet.save`` method accepts optional parameter ``folder``, if
-present, the uploaded file will be saved in ``UploadSet.destination/folder``
+The ``UploadSet.save`` method accepts optional parameter ``folder``. If
+given, the uploaded file will be saved in ``UploadSet.destination/folder``
 subdirectory.
 
-The third optional parameter is the `name`. If set, the `UploadSet` will use
+The third optional parameter is the `name`. If given, the `UploadSet` will use
 this value instead of the value of the
-``werkzeug.datastructures.FileStorage.filename``. 
+``werkzeug.datastructures.FileStorage.filename``.
 
-The ``UploadSet.save`` method returns the saved filename. Note that the saved
-`filename` isn't always equal to the `filename` uploaded by the
-user. As  mentioned in :ref:`security-checks`, The `Flask-Reuploaded`
-extension might rename the uploaded file in certain circumstances. Also, if you pass the
-``folder`` parameter the return value will be a relative path to the
+Note that you can include the `folder` in the `name` parameter  instead of
+explicitly using `folder`, i.e. ``uset.save(file, name="someguy/photo_123.")``
+
+By using the `folder` and `name` parameters, You can achieve complete control
+of the saved files within the `UploadSet`. As an example: you can store each
+user files in a separate directory. 
+
+The ``UploadSet.save`` method returns the saved filename. Note that this isn't
+always equal to the `filename` uploaded by the user nor the `name` parameter
+you passed. As mentioned in :ref:`security-checks`, The `Flask-Reuploaded`
+extension might rename the uploaded file in certain circumstances. Also, if you
+pass the ``folder`` parameter the return value will be a relative path to the
 `UploadSet` destination.
 
-You are expected to store the saved `filename` name in order to use it for
-serving the uploaded file later. 
+Usually, you are expected to store the return value of the  ``UploadSet.save``
+method  in order to use it for serving the uploaded file later. 
 
 
 File Upload Forms
 -----------------
 
-To actually upload the files, you need to properly set up your requests. You
-need to pass a ``werkzeug.datastructures.FileStorage`` object to the
-`UploadSet.save` method. You can get this object by accessing the
-``flask.request.files['field_name']`` where `field_type` is equal to the field
-name of the uploaded file in your form.
+To actually upload the files, you need to properly set up the `HTTP` requests.
+You must obtain a ``werkzeug.datastructures.FileStorage`` by using the
+``flask.request.files['field_name']``.
 
 Unfortunately, the ``flask.request.files['field_name']`` may be empty if your
 request is misconfigured. As declared by Flask_:
@@ -207,13 +216,15 @@ If you are using a client other than the browser, you should configure your
 request manually to implement the flask requirements.
 
 
+.. _serving_files:
+
 Serving Files
 -------------
 
-When you upload file by `Flask-Reuploaded` extension, you call the
-``UploadSet.save`` method. this method returns the saved `filename`. You are
-expected to store the saved `filename` and the `UploadSet` name in order to use
-them for serving the uploaded file later. 
+When you upload a file using the `Flask-Reuploaded` extension, you call the
+``UploadSet.save`` method. This method returns the saved `filename` or path. You are
+expected to store the `UploadSet` name and the ``UploadSet.save`` return value
+for serving the uploaded file. 
 
 To serve an uploaded file, use the `UploadSet` name to get the
 `UploadConfiguration` instance:
@@ -230,15 +241,23 @@ safely serve your file.
 
         return send_from_directory(uploadset_config.destination, filename)
 
+Of course, you can use another method, but the ``send_from_directory`` is secure
+and it uses ``flask.send_file`` under the hood. Please take a look at the
+send_from_directory_ and send_file_ .
+
+.. _send_from_directory: https://flask.palletsprojects.com/en/2.2.x/api/#flask.send_from_directory
+.. _send_file: https://flask.palletsprojects.com/en/2.2.x/api/#flask.send_file
+
+
 
 AutoServing Files
 -----------------
 
 To save your time, you can set `app.config['UPLOADS_AUTOSERVE']` to `True`.
 This will add `_uploads.uploaded_file` endpoint to your application. This
-endpoint requires two parameters, `setname` parameter which should be equal to
-the `UploadSet` name and the `filename` parameter which is the saved
-`filename`.
+endpoint requires two parameters, `setname` parameter, which should be equal to
+the `UploadSet` name; and the `filename` parameter, which is the saved `filename`
+or path, i.e., the return value of the ``UploadSet.save`` method.
 
 Once you have these parameters, you can serve your uploaded files from this url:
 
