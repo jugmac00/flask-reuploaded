@@ -11,8 +11,8 @@ Installation
 Migration Guide From 'Flask-Uploads'
 ------------------------------------
 
-This package is a drop-in replacement of unmaintained `Flask-Uploads`.
-If you have used `Flask-Uploads` and want to migrate to `Flask-Reuploaded`:
+This package is a drop-in replacement for the unmaintained `Flask-Uploads` package.
+If you have used `Flask-Uploads` and want to migrate to `Flask-Reuploaded`,
 
 .. code-block:: bash
 
@@ -35,15 +35,15 @@ project's goals.
 
 Nevertheless, there are the following known incompatibilities:
 
-- The `patch_request_class` helper function has been removed;
+- The ``patch_request_class`` helper function has been removed;
   the function was only necessary for Flask 0.6 and earlier.
   Since then, you can use Flask's own
   `MAX_CONTENT_LENGTH <https://flask.palletsprojects.com/en/1.1.x/config/#MAX_CONTENT_LENGTH>`_
   configuration variable, so you don’t read more than this many bytes from the incoming request data.
 
-- `UPLOADS_AUTOSERVE` of uploaded images has now been deactivated;
+- ``UPLOADS_AUTOSERVE`` of uploaded images has now been deactivated;
   this was a poorly documented "feature", which even could have led to 
   unwanted data disclosure. 
 
-  If you want to activate the feature again, you need to set 
-  `UPLOADS_AUTOSERVE=True`
+  If you want to activate the feature again, you need to explicitly set 
+  ``UPLOADS_AUTOSERVE`` to ``True``
