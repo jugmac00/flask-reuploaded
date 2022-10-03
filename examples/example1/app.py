@@ -1,6 +1,6 @@
 """
 Example application for simple usage of the `Flask-Reuploaded` extension.
-In this example, You will be able to upload files, serve them.
+In this example, You will be able to upload and serve files.
 """
 import os
 
@@ -16,13 +16,13 @@ from flask_uploads import IMAGES
 from flask_uploads import UploadSet
 from flask_uploads import configure_uploads
 
-# Define app
+# define app
 app = Flask(__name__)
 # set app config
 app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(app.root_path, "static/img")
-# Create upload set
+# create upload set
 photos = UploadSet("photos", IMAGES)
-# Configure uploads
+# configure uploads
 configure_uploads(app, photos)
 
 

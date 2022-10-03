@@ -12,15 +12,15 @@ from flask_uploads import IMAGES
 from flask_uploads import UploadSet
 from flask_uploads import configure_uploads
 
-# Define app
+# define app
 app = Flask(__name__)
 # set app config
 app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(app.root_path, "static/img")
-# Set `UPLOADS_AUTOSERVE` to `True`, it is `False` by default
+# set `UPLOADS_AUTOSERVE` to `True`, it is `False` by default
 app.config["UPLOADS_AUTOSERVE"] = True
-# Create upload set
+# create upload set
 photos = UploadSet("photos", IMAGES)
-# Configure uploads
+# configure uploads
 configure_uploads(app, photos)
 
 
@@ -28,7 +28,7 @@ configure_uploads(app, photos)
 def upload():
     if request.method == "POST" and "photo" in request.files:
         filename = photos.save(request.files["photo"])
-        # Serve files from the `_upload.uploaded_file` endpoint
+        # serve files from the `_upload.uploaded_file` endpoint
         # it takes 2 parameters, first is the setname, second is the filename
         url = url_for(
             "_uploads.uploaded_file", setname=photos.name, filename=filename
