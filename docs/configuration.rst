@@ -42,7 +42,7 @@ The following is the description of each configuration key.
 |                           | not allowed by the used upload set.              |
 +---------------------------+--------------------------------------------------+
 |   UPLOADED_FILES_DENY     | Denies file extensions allowed by the used       | 
-|                           | upload set                                       |
+|                           | upload set.                                      |
 +---------------------------+--------------------------------------------------+
 
 
@@ -90,13 +90,13 @@ is `snow.jpg`, the file is available via:
     
 
 which resolves to: http://localhost:5000/_uploads/photos/snow.jpg
-
 if you are running your server on localhost at port 5000 (The flask default)
 
 
-``Default Value: In order to stay compatible with `Flask-Uploads`, for 
+
+Default Value: In order to stay compatible with `Flask-Uploads`, for 
 `Flask-Reuploaded<1.0.0` the `UPLOADS_AUTOSERVE` default is `True`. 
-Since version `1.0.0` it is `False` by default.``
+Since version `1.0.0` it is `False` by default.
 
 If you want to serve the uploaded files via http, and you expect heavy traffic,
 you should think about serving the files directly via a web/proxy server, such as e.g. Nginx.
@@ -109,5 +109,5 @@ By default, Flask doesn't put any limits on the size of the uploaded data. To
 limit the max upload size, you can use Flask's `MAX_CONTENT_LENGTH` as
 documented by Flask_ .
 
-.. _Flask: https://flask.palletsprojects.com/en/2.1.x/patterns/fileuploads/#improving-uploads
+.. _Flask: https://flask.palletsprojects.com/en/latest/patterns/fileuploads/#improving-uploads
 
