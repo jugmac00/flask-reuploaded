@@ -43,5 +43,5 @@ Contents
    Minimal Application <minimal_app>
    Explanation <explanation>   
    API <api>
-   Changelog <changes_link>
+   Changelog <changes>
    Contributing <contributing_link>
