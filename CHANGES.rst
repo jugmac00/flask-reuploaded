@@ -1,6 +1,13 @@
 Changelog
 =========
 
+
+1.3.0 (2022.10.04)
+------------------
+- improve documentation
+  (`#133 <https://github.com/jugmac00/flask-reuploaded/issues/133>`_)
+  
+
 1.2.0 (2021.11.07)
 ------------------
 - add contexts to coverage report
