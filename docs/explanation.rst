@@ -71,8 +71,9 @@ may also cause your server to crash. This aspect is outside of the scope of this
 extension but worth mentioning here.
 
 
-Configuring the destination for ``UploadSet``s
-----------------------------------------------
+
+Configuring the destination for the ``UploadSet``
+-------------------------------------------------
 
 Each ``UploadSet`` object should know its destination path to store the uploaded
 files in. When you call the ``configure_uploads`` function, the ``UploadSet`` object

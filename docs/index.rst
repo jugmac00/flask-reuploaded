@@ -44,4 +44,4 @@ Contents
    Explanation <explanation>   
    API <api>
    Changelog <changes>
-   Contributing <contributing_link>
+   Contributing <contributing>
