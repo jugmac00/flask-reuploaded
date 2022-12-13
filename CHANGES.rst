@@ -1,13 +1,13 @@
 Changelog
 =========
 
-
-1.3.0 (2022.10.04)
+1.3.0 (unreleased)
 ------------------
 - improve documentation
   (`#133 <https://github.com/jugmac00/flask-reuploaded/issues/133>`_)
 - drop support for Python 3.6
 - add support for Python 3.11
+- update dependencies for building documentation
 
 
 1.2.0 (2021.11.07)
