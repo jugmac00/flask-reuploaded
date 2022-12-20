@@ -13,7 +13,7 @@
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/Flask-Reuploaded/
 
-.. image:: https://img.shields.io/pypi/l/hibpcli
+.. image:: https://img.shields.io/pypi/l/flask-reuploaded
     :target: https://github.com/jugmac00/flask-reuploaded/blob/master/LICENSE
 
 
