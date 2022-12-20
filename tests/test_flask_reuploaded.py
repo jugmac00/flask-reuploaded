@@ -74,10 +74,10 @@ Config = UploadConfiguration
 
 
 class TestConfiguration:
-    def setup(self) -> None:
+    def setup_method(self) -> None:
         self.app = Flask(__name__)
 
-    def teardown(self) -> None:
+    def teardown_method(self) -> None:
         del self.app
 
     def configure(
@@ -305,12 +305,12 @@ class TestSaving:
 
 @patch("os.makedirs", Mock(return_value=None))
 class TestConflictResolution:
-    def setup(self) -> None:
+    def setup_method(self) -> None:
         self.extant_files: List[str] = []
         self.old_exists = os.path.exists
         os.path.exists = self.exists  # type: ignore
 
-    def teardown(self) -> None:
+    def teardown_method(self) -> None:
         os.path.exists = self.old_exists
         del self.extant_files, self.old_exists
 
