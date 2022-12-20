@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3.0 (unreleased)
+1.3.0 (2022.12.20)
 ------------------
 - improve documentation
   (`#133 <https://github.com/jugmac00/flask-reuploaded/issues/133>`_)
