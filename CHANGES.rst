@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.3.1 (unreleased)
+------------------
+- fix deprecation warning for pytest
+
 1.3.0 (2022.12.20)
 ------------------
 - improve documentation
