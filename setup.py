@@ -25,7 +25,7 @@ LONG = read("README.rst") + "\n\n" + read("CHANGES.rst")
 
 setup(
     name="Flask-Reuploaded",
-    version="1.3.1.dev0",
+    version="1.4.0",
     url="https://github.com/jugmac00/flask-reuploaded",
     project_urls={
         "Source": "https://github.com/jugmac00/flask-reuploaded",

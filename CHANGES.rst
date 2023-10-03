@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.0 (unreleased)
+1.4.0 (2023.10.03)
 ------------------
 - fix deprecation warning for pytest
 - drop support for Python 3.6 / 3.7
