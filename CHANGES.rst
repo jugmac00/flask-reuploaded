@@ -1,9 +1,12 @@
 Changelog
 =========
 
-1.3.1 (unreleased)
+1.4.0 (unreleased)
 ------------------
 - fix deprecation warning for pytest
+- drop support for Python 3.6 / 3.7
+- add support for Python 3.12
+- upgrade dependencies for building docs
 
 1.3.0 (2022.12.20)
 ------------------
