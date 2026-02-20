@@ -13,12 +13,9 @@ and upload your files to it.
 import os
 import os.path
 import posixpath
+from collections.abc import Callable
+from collections.abc import Iterable
 from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import Iterable
-from typing import Optional
-from typing import Tuple
 from typing import Union
 
 from flask import Blueprint
@@ -45,7 +42,7 @@ def addslash(url: str) -> str:
 def config_for_set(
         uset: 'UploadSet',
         app: Flask,
-        defaults: Optional[Dict[str, Optional[str]]] = None
+        defaults: dict[str, str | None] | None = None
 ) -> 'UploadConfiguration':
     """
     This is a helper function for `configure_uploads` that extracts the
@@ -116,7 +113,7 @@ def configure_uploads(
     defaults = dict(
         dest=app.config.get('UPLOADS_DEFAULT_DEST'),
         url=app.config.get('UPLOADS_DEFAULT_URL')
-    )  # type: Dict[str, Optional[str]]
+    )  # type: dict[str, str | None]
 
     for uset in upload_sets:
         config = config_for_set(uset, app, defaults)
@@ -146,9 +143,9 @@ class UploadConfiguration:
     def __init__(
             self,
             destination: str,
-            base_url: Optional[str] = None,
-            allow: Union[Tuple[()], Tuple[str, ...]] = (),
-            deny: Union[Tuple[()], Tuple[str, ...]] = ()
+            base_url: str | None = None,
+            allow: tuple[()] | tuple[str, ...] = (),
+            deny: tuple[()] | tuple[str, ...] = ()
     ) -> None:
         self.destination = destination
         self.base_url = base_url
@@ -156,10 +153,10 @@ class UploadConfiguration:
         self.deny = deny
 
     @property
-    def tuple(self) -> Tuple[
-        str, Optional[str],
-        Union[Tuple[()], Tuple[str, ...]],
-        Union[Tuple[()], Tuple[str, ...]]
+    def tuple(self) -> tuple[
+        str, str | None,
+        tuple[()] | tuple[str, ...],
+        tuple[()] | tuple[str, ...]
     ]:
         return (self.destination, self.base_url, self.allow, self.deny)
 
@@ -193,13 +190,13 @@ class UploadSet:
         self,
         name: str = 'files',
         extensions: Iterable[str] = DEFAULTS,
-        default_dest: Optional[Callable[[Flask], str]] = None
+        default_dest: Callable[[Flask], str] | None = None
     ) -> None:
         if not name.isalnum():
             raise ValueError("Name must be alphanumeric (no underscores)")
         self.name = name
         self.extensions = extensions
-        self._config: Optional[UploadConfiguration] = None
+        self._config: UploadConfiguration | None = None
         self.default_dest = default_dest
 
     @property
@@ -238,7 +235,7 @@ class UploadSet:
         else:
             return base + filename
 
-    def path(self, filename: str, folder: Optional[str] = None) -> str:
+    def path(self, filename: str, folder: str | None = None) -> str:
         """
         This returns the absolute path of a file uploaded to this set. It
         doesn't actually check whether said file exists.
@@ -288,8 +285,8 @@ class UploadSet:
     def save(
         self,
         storage: FileStorage,
-        folder: Optional[str] = None,
-        name: Optional[str] = None
+        folder: str | None = None,
+        name: str | None = None
     ) -> str:
         """This saves the `storage` into this upload set.
 

@@ -6,8 +6,6 @@
 
 import os
 import os.path
-from typing import Dict
-from typing import List
 from unittest.mock import Mock
 from unittest.mock import patch
 
@@ -82,7 +80,7 @@ class TestConfiguration:
 
     def configure(
         self, *sets: 'UploadSet', **options: str
-    ) -> Dict[str, UploadConfiguration]:
+    ) -> dict[str, UploadConfiguration]:
         self.app.config.update(options)
         configure_uploads(self.app, sets)
         return self.app.upload_set_config  # type: ignore
@@ -306,7 +304,7 @@ class TestSaving:
 @patch("os.makedirs", Mock(return_value=None))
 class TestConflictResolution:
     def setup_method(self) -> None:
-        self.extant_files: List[str] = []
+        self.extant_files: list[str] = []
         self.old_exists = os.path.exists
         os.path.exists = self.exists  # type: ignore
 
