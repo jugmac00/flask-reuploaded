@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.5.0 (unreleased)
+------------------
+- drop support for Python 3.8 and 3.9
+- add support for Python 3.13
+
 1.4.1 (unreleased)
 ------------------
 - migrate from setup.py to pyproject.toml configuration

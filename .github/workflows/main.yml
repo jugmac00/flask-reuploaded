@@ -19,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -39,8 +39,8 @@ jobs:
         run: "python -m tox"
 
       - name: "Report to coveralls"
-        # coverage is only created in the py39 environment
-        if: "matrix.python-version == '3.9'"
+        # coverage is only created in the py311 environment
+        if: "matrix.python-version == '3.12'"
         run: |
           pip install coveralls
           coveralls --service=github

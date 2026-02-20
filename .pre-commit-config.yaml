@@ -19,7 +19,7 @@ repos:
     rev: v3.19.0
     hooks:
     - id: pyupgrade
-      args: [--py36-plus]
+      args: [--py310-plus]
 
   - repo: https://github.com/mgedmin/check-python-versions
     rev: 0.22.1

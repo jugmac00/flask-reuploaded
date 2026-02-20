@@ -7,7 +7,6 @@ This means:
 """
 from typing import Any
 from typing import BinaryIO
-from typing import Optional
 
 from werkzeug.datastructures import FileStorage
 
@@ -32,12 +31,12 @@ class TestingFileStorage(FileStorage):
     """
     def __init__(
         self,
-        stream: Optional[BinaryIO] = None,
-        filename: Optional[str] = None,
-        name: Optional[str] = None,
+        stream: BinaryIO | None = None,
+        filename: str | None = None,
+        name: str | None = None,
         content_type: str = 'application/octet-stream',
         content_length: int = -1,
-        headers: Optional[Any] = None
+        headers: Any | None = None
     ) -> None:
         super().__init__(
             stream,
@@ -47,7 +46,7 @@ class TestingFileStorage(FileStorage):
             content_length=content_length,
             headers=None
         )
-        self.saved = None  # type: Optional[str]
+        self.saved = None  # type: str | None
 
     def save(self, dst: str, buffer_size: int = 16384) -> None:  # type: ignore
         """This marks the file as saved.

@@ -1,6 +1,6 @@
 """Extension presets and extension configuration."""
 import os
-from typing import Iterable
+from collections.abc import Iterable
 from typing import cast
 
 # This contains archive and compression formats (.gz, .bz2, .zip, .tar,
