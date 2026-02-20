@@ -6,6 +6,8 @@
 
 import os
 import os.path
+import shutil
+import tempfile
 from unittest.mock import Mock
 from unittest.mock import patch
 
@@ -13,6 +15,7 @@ import pytest
 from flask import Flask
 from flask import url_for
 from flask_uploads import ALL
+from flask_uploads import IMAGES
 from flask_uploads import AllExcept
 from flask_uploads import TestingFileStorage
 from flask_uploads import UploadConfiguration
@@ -394,3 +397,246 @@ def test_configure_for_set_throws_runtimeerror() -> None:
     app = Flask(__name__)
     with pytest.raises(RuntimeError):
         config_for_set(upload_set, app)
+
+
+class TestSecurityFixes:
+    """Tests for security vulnerability fixes.
+
+    These tests verify that path traversal and extension bypass vulnerabilities
+    have been properly fixed.
+    """
+
+    def test_path_traversal_prevention_via_name_parameter(self) -> None:
+        """Verify path traversal via `name` is prevented."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="safe.txt")
+
+            result = uset.save(tfs, name="../../../etc/passwd")
+
+            assert "../" not in result
+            assert "passwd" in result
+            assert tfs.saved is not None
+            assert "passwd" in tfs.saved
+            assert os.path.realpath(tfs.saved).startswith(
+                os.path.realpath(tmpdir)
+            )
+
+    def test_absolute_path_prevention_via_name_parameter(self) -> None:
+        """Verify absolute paths in `name` are sanitized."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="safe.txt")
+
+            result = uset.save(tfs, name="/etc/passwd")
+
+            assert "passwd" in result
+            assert tfs.saved is not None
+            assert "passwd" in tfs.saved
+
+    def test_extension_bypass_prevention_via_name_parameter(self) -> None:
+        """Verify extension validation cannot be bypassed via `name`."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("photos", IMAGES)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="legitimate.jpg")
+
+            with pytest.raises(UploadNotAllowed) as exc_info:
+                uset.save(tfs, name="backdoor.py")
+
+            assert "py" in str(exc_info.value).lower()
+
+    def test_extension_bypass_with_double_extension(self) -> None:
+        """Verify double extensions don't bypass validation."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("photos", IMAGES)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="safe.jpg")
+
+            result = uset.save(tfs, name="backdoor.php.jpg")
+            assert ".jpg" in result
+
+    def test_folder_extraction_sanitization(self) -> None:
+        """Verify folder extracted from `name` is sanitized."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="test.txt")
+
+            result = uset.save(tfs, name="../../tmp/file.txt")
+
+            assert "../" not in result
+            assert tfs.saved is not None
+            assert os.path.realpath(tfs.saved).startswith(
+                os.path.realpath(tmpdir)
+            )
+            assert "file.txt" in result
+
+    def test_explicit_folder_parameter_sanitization(self) -> None:
+        """Verify explicit `folder` parameter is sanitized."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="test.txt")
+
+            result = uset.save(tfs, folder="../../tmp")
+
+            assert "../" not in result
+            assert tfs.saved is not None
+            assert os.path.realpath(tfs.saved).startswith(
+                os.path.realpath(tmpdir)
+            )
+
+    def test_path_containment_check(self) -> None:
+        """Verify final path is contained within upload directory."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="test.txt")
+
+            uset.save(tfs, name="../../../../../../../../tmp/escape.txt")
+
+            assert tfs.saved is not None
+            real_saved = os.path.realpath(tfs.saved)
+            real_upload = os.path.realpath(tmpdir)
+            assert real_saved.startswith(real_upload)
+
+    def test_empty_name_after_sanitization(self) -> None:
+        """Verify names that become empty after sanitization are rejected."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="test.txt")
+
+            with pytest.raises(ValueError) as exc_info:
+                uset.save(tfs, name="...")
+
+            assert "sanitization" in str(exc_info.value).lower()
+
+    def test_windows_path_separators(self) -> None:
+        """Verify Windows-style path separators are sanitized."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="test.txt")
+
+            result = uset.save(tfs, name="..\\..\\temp\\evil.txt")
+
+            assert "\\" not in result
+            assert tfs.saved is not None
+            assert os.path.realpath(tfs.saved).startswith(
+                os.path.realpath(tmpdir)
+            )
+
+    def test_legitimate_subfolder_still_works(self) -> None:
+        """Verify legitimate subfolder usage still works."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="photo.jpg")
+
+            result = uset.save(tfs, name="users/avatar.jpg")
+
+            assert result == "users/avatar.jpg"
+            assert tfs.saved is not None
+            assert "users" in tfs.saved
+            assert "avatar.jpg" in tfs.saved
+
+    def test_legitimate_custom_name_still_works(self) -> None:
+        """Verify legitimate custom names still work."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="upload.txt")
+
+            result = uset.save(tfs, name="renamed_file.txt")
+
+            assert result == "renamed_file.txt"
+            assert tfs.saved is not None
+            assert "renamed_file.txt" in tfs.saved
+
+    def test_legitimate_name_with_extension_placeholder(self) -> None:
+        """Verify trailing dot preserves extension."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("photos", IMAGES)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="photo.jpg")
+
+            result = uset.save(tfs, name="image_123.")
+
+            assert result == "image_123.jpg"
+            assert tfs.saved is not None
+            assert "image_123.jpg" in tfs.saved
+
+    def test_combined_attack_prevention(self) -> None:
+        """Verify combined path traversal + extension bypass is prevented."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("photos", IMAGES)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="payload.jpg")
+
+            with pytest.raises(UploadNotAllowed):
+                uset.save(tfs, name="../templates/rce.html")
+
+    def test_null_byte_injection(self) -> None:
+        """Verify null byte injection is sanitized."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="test.txt")
+
+            result = uset.save(tfs, name="file.txt\x00.jpg")
+
+            assert "\x00" not in result
+            assert tfs.saved is not None
+            assert os.path.realpath(tfs.saved).startswith(
+                os.path.realpath(tmpdir)
+            )
+
+    def test_special_characters_sanitization(self) -> None:
+        """Verify special characters are sanitized."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="test.txt")
+
+            result = uset.save(tfs, name='file<>:"|?*.txt')
+
+            for char in '<>:"|?*':
+                assert char not in result
+            assert tfs.saved is not None
+            assert os.path.realpath(tfs.saved).startswith(
+                os.path.realpath(tmpdir)
+            )
+
+    def test_name_already_ends_with_dot(self) -> None:
+        """Verify trailing dot keeps extension."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", ALL)
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="photo.jpg")
+
+            result = uset.save(tfs, name="myfile.")
+
+            assert result == "myfile.jpg"
+            assert tfs.saved is not None
+            assert "myfile.jpg" in tfs.saved
+
+    def test_symlink_path_traversal_prevention(self) -> None:
+        """Verify symlinks cannot be used to escape upload directory."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            outside_dir = tempfile.mkdtemp()
+            try:
+                symlink_path = os.path.join(tmpdir, "link")
+                os.symlink(outside_dir, symlink_path)
+
+                uset = UploadSet("files", ALL)
+                uset._config = Config(tmpdir)
+                tfs = TestingFileStorage(filename="test.txt")
+
+                with pytest.raises(ValueError, match="Path traversal"):
+                    uset.save(tfs, folder="link", name="../../escape.txt")
+            finally:
+                shutil.rmtree(outside_dir, ignore_errors=True)

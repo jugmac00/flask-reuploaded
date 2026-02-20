@@ -5,11 +5,25 @@ Changelog
 ------------------
 - drop support for Python 3.8 and 3.9
 - add support for Python 3.13
-
-1.4.1 (unreleased)
-------------------
 - migrate from setup.py to pyproject.toml configuration
 - fix doc building on read the docs
+- **SECURITY FIX**: Fix critical path traversal and extension bypass vulnerability (CVE pending, CVSS 9.8)
+
+  - Apply ``secure_filename()`` to the ``name`` parameter to prevent path traversal attacks
+  - Re-validate file extension after ``name`` override to prevent extension bypass
+  - Add path containment check to ensure files are saved within the upload directory
+  - Sanitize folder component when extracted from ``name`` parameter
+
+  **Impact**: This vulnerability allowed remote attackers to write files to arbitrary locations
+  on the filesystem and bypass extension restrictions, potentially leading to remote code
+  execution via Server-Side Template Injection (SSTI) in Flask applications.
+
+  **Credit**: Jaron Cabral (Cal Poly Humboldt) for discovery and reporting
+
+  **Recommendation**: All users should upgrade to this version immediately. Do not pass
+  user-controlled input to the ``name`` parameter in older versions.
+
+
 
 1.4.0 (2023.10.03)
 ------------------
