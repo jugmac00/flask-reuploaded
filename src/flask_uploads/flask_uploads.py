@@ -309,8 +309,18 @@ class UploadSet:
         if not isinstance(storage, FileStorage):
             raise TypeError("storage must be a werkzeug.FileStorage")
 
+        # Track if name ends with dot before any processing
+        name_ends_with_dot = name is not None and name.rstrip().endswith('.')
+
         if folder is None and name is not None and "/" in name:
             folder, name = os.path.split(name)
+            # Check again after split
+            name_ends_with_dot = name.rstrip().endswith('.')
+            # Sanitize folder and name extracted from name parameter
+            if folder:
+                folder = secure_filename(folder)
+            if name:
+                name = secure_filename(name)
         if storage.filename is None:
             raise ValueError("Filename must not be empty!")
         basename = self.get_basename(storage.filename)
@@ -319,12 +329,27 @@ class UploadSet:
             raise UploadNotAllowed()
 
         if name:
-            if name.endswith('.'):
-                basename = name + extension(basename)
+            # Sanitize name parameter to prevent path traversal
+            name = secure_filename(name)
+            if not name:
+                raise ValueError("Invalid filename after sanitization")
+
+            if name_ends_with_dot and not name.endswith('.'):
+                # Restore the dot if it was removed by secure_filename
+                basename = name + '.' + extension(basename)
             else:
                 basename = name
 
+            # Re-validate extension after name override
+            ext = extension(basename)
+            if ext and not self.extension_allowed(ext):
+                raise UploadNotAllowed(
+                    f"File extension '{ext}' is not allowed"
+                )
+
         if folder:
+            # Additional sanitization of folder parameter
+            folder = secure_filename(folder)
             target_folder = os.path.join(self.config.destination, folder)
         else:
             target_folder = self.config.destination
@@ -334,6 +359,18 @@ class UploadSet:
             basename = self.resolve_conflict(target_folder, basename)
 
         target = os.path.join(target_folder, basename)
+
+        # Verify path containment to prevent directory traversal
+        target_real = os.path.realpath(target)
+        dest_real = os.path.realpath(self.config.destination)
+        if not (
+            target_real.startswith(dest_real + os.sep) or
+            target_real == dest_real
+        ):
+            raise ValueError(
+                "Security: Path traversal attempt detected"
+            )
+
         storage.save(target)
         if folder:
             return posixpath.join(folder, basename)
