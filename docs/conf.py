@@ -35,6 +35,16 @@ exclude_patterns = ['_build']
 # a list of builtin themes.
 html_theme = 'flask'
 
+# Theme options for the Pallets Flask theme
+html_theme_options = {
+    'globaltoc_maxdepth': 2,
+}
+
+# Context for the theme
+html_context = {
+    'versions': [],
+}
+
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 # html_title = None

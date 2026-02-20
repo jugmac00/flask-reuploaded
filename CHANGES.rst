@@ -4,6 +4,7 @@ Changelog
 1.4.1 (unreleased)
 ------------------
 - migrate from setup.py to pyproject.toml configuration
+- fix doc building on read the docs
 
 1.4.0 (2023.10.03)
 ------------------
