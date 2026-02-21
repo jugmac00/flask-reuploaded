@@ -1,9 +1,9 @@
-.. image:: https://github.com/jugmac00/flask-reuploaded/actions/workflows/main.yml/badge.svg?branch=master
+.. image:: https://github.com/jugmac00/flask-reuploaded/actions/workflows/main.yml/badge.svg?branch=main
     :target: https://github.com/jugmac00/flask-reuploaded/actions/workflows/main.yml
     :alt: CI Status
 
-.. image:: https://coveralls.io/repos/github/jugmac00/flask-reuploaded/badge.svg?branch=master
-    :target: https://coveralls.io/github/jugmac00/flask-reuploaded?branch=master
+.. image:: https://coveralls.io/repos/github/jugmac00/flask-reuploaded/badge.svg?branch=main
+    :target: https://coveralls.io/github/jugmac00/flask-reuploaded?branch=main
 
 .. image:: https://img.shields.io/pypi/v/flask-reuploaded   
     :alt: PyPI
@@ -14,7 +14,7 @@
     :target: https://pypi.org/project/Flask-Reuploaded/
 
 .. image:: https://img.shields.io/pypi/l/flask-reuploaded
-    :target: https://github.com/jugmac00/flask-reuploaded/blob/master/LICENSE
+    :target: https://github.com/jugmac00/flask-reuploaded/blob/main/LICENSE
 
 
 Flask-Reuploaded
@@ -246,4 +246,4 @@ Contributions are more than welcome.
 
 Please have a look at the `open issues <https://github.com/jugmac00/flask-reuploaded/issues>`_.
 
-There is also a `short contributing guide <https://github.com/jugmac00/flask-reuploaded/blob/master/CONTRIBUTING.rst>`_.
+There is also a `short contributing guide <https://github.com/jugmac00/flask-reuploaded/blob/main/CONTRIBUTING.rst>`_.
