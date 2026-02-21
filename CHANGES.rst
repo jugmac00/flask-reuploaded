@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.5.0 (unreleased)
+1.5.0 (2026.02.21)
 ------------------
 - drop support for Python 3.8 and 3.9
 - add support for Python 3.13
