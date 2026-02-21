@@ -1,6 +1,6 @@
-.. image:: https://github.com/jugmac00/flask-reuploaded/workflows/CI/badge.svg?branch=master
-   :target: https://github.com/jugmac00/flask-reuploaded/actions?workflow=CI
-   :alt: CI Status
+.. image:: https://github.com/jugmac00/flask-reuploaded/actions/workflows/main.yml/badge.svg?branch=master
+    :target: https://github.com/jugmac00/flask-reuploaded/actions/workflows/main.yml
+    :alt: CI Status
 
 .. image:: https://coveralls.io/repos/github/jugmac00/flask-reuploaded/badge.svg?branch=master
     :target: https://coveralls.io/github/jugmac00/flask-reuploaded?branch=master
