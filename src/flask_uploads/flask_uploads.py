@@ -340,6 +340,8 @@ class UploadSet:
             else:
                 basename = name
 
+            basename = lowercase_ext(basename)
+
             # Re-validate extension after name override
             ext = extension(basename)
             if ext and not self.extension_allowed(ext):

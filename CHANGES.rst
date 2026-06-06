@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.6.0 (unreleased)
+------------------
+- **SECURITY FIX**: Ensure overridden file names are normalized via
+  ``lowercase_ext()`` prior to extension validation checking and writing to
+  disk.
+
 1.5.0 (2026.02.21)
 ------------------
 - drop support for Python 3.8 and 3.9
