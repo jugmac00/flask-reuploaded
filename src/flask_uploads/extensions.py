@@ -99,7 +99,7 @@ class AllExcept:
 
 
 def extension(filename: str) -> str:
-    ext = os.path.splitext(filename)[1]
+    ext = os.path.splitext(filename)[1] if len(os.path.splitext(filename)[1]) >0 else os.path.splitext(filename)[0]
     if ext.startswith('.'):
         # os.path.splitext retains . separator
         ext = ext[1:]
