@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "Flask-Reuploaded"
 version = "1.6.0"
 description = "Flexible and efficient upload handling for Flask"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Matthew \"LeafStorm\" Frazier", email = "leafstormrush@gmail.com"},
 ]
