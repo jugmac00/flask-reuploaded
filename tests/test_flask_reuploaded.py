@@ -3,11 +3,12 @@
 :copyright: 2019-2020 Jürgen Gmach <juergen.gmach@googlemail.com>
 :license:   MIT/X11, see LICENSE for details
 """
-
 import os
 import os.path
 import shutil
 import tempfile
+from collections.abc import Iterable
+from typing import cast
 from unittest.mock import Mock
 from unittest.mock import patch
 
@@ -16,6 +17,7 @@ from flask import Flask
 from flask import url_for
 from flask_uploads import ALL
 from flask_uploads import IMAGES
+from flask_uploads import SCRIPTS
 from flask_uploads import AllExcept
 from flask_uploads import TestingFileStorage
 from flask_uploads import UploadConfiguration
@@ -447,6 +449,20 @@ class TestSecurityFixes:
                 uset.save(tfs, name="backdoor.py")
 
             assert "py" in str(exc_info.value).lower()
+
+    def test_extension_bypass_case_folding_via_name_parameter(self) -> None:
+        """Verify extension validation cannot be bypassed via `name` using...
+
+        uppercase/mixed-case extension."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            uset = UploadSet("files", cast(Iterable[str], AllExcept(SCRIPTS)))
+            uset._config = Config(tmpdir)
+            tfs = TestingFileStorage(filename="safe.txt")
+
+            with pytest.raises(UploadNotAllowed) as exc_info:
+                uset.save(tfs, name="backdoor.PHP")
+
+            assert "php" in str(exc_info.value).lower()
 
     def test_extension_bypass_with_double_extension(self) -> None:
         """Verify double extensions don't bypass validation."""
