@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.0 (unreleased)
+1.6.0 (2026.06.06)
 ------------------
 - **SECURITY FIX**: Ensure overridden file names are normalized via
   ``lowercase_ext()`` prior to extension validation checking and writing to
