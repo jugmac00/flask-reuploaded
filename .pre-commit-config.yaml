@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/PyCQA/isort
-    rev: 9.0.0a3
+    rev: 9.0.2
     hooks:
     - id: isort
 
@@ -10,19 +10,19 @@ repos:
       - id: debug-statements
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+    rev: 7.4.1
     hooks:
     - id: flake8
       additional_dependencies: [flake8-bugbear==25.11.29]
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    rev: v3.22.0
     hooks:
     - id: pyupgrade
       args: [--py310-plus]
 
   - repo: https://github.com/mgedmin/check-python-versions
-    rev: 0.24.2
+    rev: 0.25.0
     hooks:
     - id: check-python-versions
 
